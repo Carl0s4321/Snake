@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://gige70kcqqq1"]
+
+[sub_resource type="TileSet" id="TileSet_j64mr"]
+tile_size = Vector2i(40, 40)
+
+[node name="Main" type="Node"]
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_j64mr")
+format = 2
