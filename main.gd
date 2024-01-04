@@ -55,7 +55,7 @@ const SNAKE_PARTS = {
 
 var snake_body = [Vector2(5,10),Vector2(4,10),Vector2(3,10),Vector2(2,10)]
 var snake_direction  = Vector2(1,0)
-
+var previous_direction = "right"
 func draw_snake():
 	#for block in snake_body:
 		#$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE, Vector2i(3,0), 0)
@@ -67,13 +67,16 @@ func draw_snake():
 			var head_dir = relation2(snake_body[0], snake_body[1])
 			if head_dir == 'right': 
 				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-right"], Vector2i(0,0), 0)
+				previous_direction = "right"
 			elif head_dir == 'left': 
 				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-left"], Vector2i(0,0), 0)
+				previous_direction = "left"
 			elif head_dir == 'up': 
 				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-up"], Vector2i(0,0), 0)
+				previous_direction = "up"
 			elif head_dir == 'down': 
 				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-down"], Vector2i(0,0), 0)
-			
+				previous_direction = "down"
 			
 		#head -> body
 		elif block_index == 1:
@@ -202,14 +205,15 @@ func delete_tiles(id: int):
 		$SnakeApple.set_cell(0, Vector2i(cell.x,cell.y), -1)
 
 func _input(event):
-	if Input.is_action_just_pressed("ui_up"):
+	if Input.is_action_just_pressed("ui_up") and previous_direction != "down":
 		snake_direction = Vector2(0, -1)
-	if Input.is_action_just_pressed("ui_left"):
-		snake_direction = Vector2(-1, 0)
-	if Input.is_action_just_pressed("ui_right"):
-		snake_direction = Vector2(1, 0)
-	if Input.is_action_just_pressed("ui_down"):
+	elif Input.is_action_just_pressed("ui_down") and previous_direction != "up":
 		snake_direction = Vector2(0, 1)
+	elif Input.is_action_just_pressed("ui_left") and previous_direction != "right":
+		snake_direction = Vector2(-1, 0)
+	elif Input.is_action_just_pressed("ui_right") and previous_direction != "left":
+		snake_direction = Vector2(1, 0)
+	
 
 func _ready():
 	pass
