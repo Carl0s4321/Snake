@@ -487,9 +487,3 @@ script = ExtResource("1_uqj7q")
 [node name="SnakeApple" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_s5xoc")
 format = 2
-
-[node name="SnakeTick" type="Timer" parent="."]
-wait_time = 0.2
-autostart = true
-
-[connection signal="timeout" from="SnakeTick" to="." method="_on_snake_tick_timeout"]
