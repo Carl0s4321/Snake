@@ -1,7 +1,8 @@
-[gd_resource type="TileSet" load_steps=96 format=3 uid="uid://cinvy7px11onv"]
+[gd_resource type="TileSet" load_steps=98 format=3 uid="uid://cinvy7px11onv"]
 
 [ext_resource type="Texture2D" uid="uid://dbdhego68ion4" path="res://art/snake-body-se.png" id="1_ikqb2"]
-[ext_resource type="Texture2D" path="res://art/apple.png" id="1_u1mdw"]
+[ext_resource type="Texture2D" uid="uid://xi84jab164h8" path="res://art/apple.png" id="1_u1mdw"]
+[ext_resource type="Texture2D" uid="uid://bp88n62ebkwgm" path="res://art/grass.png" id="2_e7ayl"]
 [ext_resource type="Texture2D" uid="uid://b2go57es8umhs" path="res://art/snake-body-sw.png" id="2_hauhh"]
 [ext_resource type="Texture2D" uid="uid://cirguplgylqp3" path="res://art/snake-body-vertical.png" id="3_x4scv"]
 [ext_resource type="Texture2D" uid="uid://blc7qwbrdos4w" path="res://art/animations/snake-body-move-down-Sheet.png" id="4_xtnuk"]
@@ -40,10 +41,10 @@
 [ext_resource type="Texture2D" uid="uid://bmgoh1qiirkwa" path="res://art/animations/snake-sw-move-left-Sheet.png" id="37_halv6"]
 [ext_resource type="Texture2D" uid="uid://duuwuylxhri0m" path="res://art/animations/snake-sw-turn-down-Sheet.png" id="38_cfjnf"]
 [ext_resource type="Texture2D" uid="uid://cdluxg3uqpat2" path="res://art/animations/snake-sw-turn-left-Sheet.png" id="39_vwxe8"]
-[ext_resource type="Texture2D" uid="uid://dt8e4gjxrb1ht" path="res://art/animations/snake-tail-move-down-Sheet.png" id="40_p32b7"]
-[ext_resource type="Texture2D" uid="uid://0w6hfosfngm3" path="res://art/animations/snake-tail-move-left-Sheet.png" id="41_orl3q"]
-[ext_resource type="Texture2D" uid="uid://bat4ysthlq8kb" path="res://art/animations/snake-tail-move-right-Sheet.png" id="42_myaa7"]
-[ext_resource type="Texture2D" uid="uid://w78cnhci8xdf" path="res://art/animations/snake-tail-move-up-Sheet.png" id="43_7vvfm"]
+[ext_resource type="Texture2D" uid="uid://w78cnhci8xdf" path="res://art/animations/snake-tail-move-down-Sheet.png" id="40_p32b7"]
+[ext_resource type="Texture2D" uid="uid://bat4ysthlq8kb" path="res://art/animations/snake-tail-move-left-Sheet.png" id="41_orl3q"]
+[ext_resource type="Texture2D" uid="uid://0w6hfosfngm3" path="res://art/animations/snake-tail-move-right-Sheet.png" id="42_myaa7"]
+[ext_resource type="Texture2D" uid="uid://dt8e4gjxrb1ht" path="res://art/animations/snake-tail-move-up-Sheet.png" id="43_7vvfm"]
 [ext_resource type="Texture2D" uid="uid://bnmd3bfml75w7" path="res://art/snake-body-horizontal.png" id="44_nq77l"]
 [ext_resource type="Texture2D" uid="uid://2a8xietm6rga" path="res://art/snake-body-ne.png" id="45_pqas2"]
 [ext_resource type="Texture2D" uid="uid://csemk46qtmlmo" path="res://art/snake-body-nw.png" id="46_upd5y"]
@@ -51,6 +52,11 @@
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m2dvf"]
 texture = ExtResource("1_u1mdw")
 0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1v1ya"]
+texture = ExtResource("2_e7ayl")
+0:0/0 = 0
+4:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gf2ne"]
 texture = ExtResource("1_ikqb2")
@@ -684,7 +690,7 @@ texture = ExtResource("39_vwxe8")
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u18k3"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwmoh"]
 texture = ExtResource("40_p32b7")
 0:0/animation_speed = 80.0
 0:0/animation_frame_0/duration = 1.0
@@ -705,7 +711,7 @@ texture = ExtResource("40_p32b7")
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88na8"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e7pua"]
 texture = ExtResource("41_orl3q")
 0:0/animation_speed = 80.0
 0:0/animation_frame_0/duration = 1.0
@@ -726,7 +732,7 @@ texture = ExtResource("41_orl3q")
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e7pua"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_88na8"]
 texture = ExtResource("42_myaa7")
 0:0/animation_speed = 80.0
 0:0/animation_frame_0/duration = 1.0
@@ -747,7 +753,7 @@ texture = ExtResource("42_myaa7")
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_iwmoh"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u18k3"]
 texture = ExtResource("43_7vvfm")
 0:0/animation_speed = 80.0
 0:0/animation_frame_0/duration = 1.0
@@ -770,7 +776,7 @@ texture = ExtResource("43_7vvfm")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8wf1x"]
 resource_name = "empty"
-texture = ExtResource("43_7vvfm")
+texture = ExtResource("40_p32b7")
 8:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nq1n6"]
@@ -828,9 +834,10 @@ sources/45 = SubResource("TileSetAtlasSource_naowa")
 sources/46 = SubResource("TileSetAtlasSource_cgy1c")
 sources/47 = SubResource("TileSetAtlasSource_bo3gu")
 sources/48 = SubResource("TileSetAtlasSource_0tt7u")
-sources/49 = SubResource("TileSetAtlasSource_u18k3")
-sources/50 = SubResource("TileSetAtlasSource_88na8")
-sources/51 = SubResource("TileSetAtlasSource_e7pua")
-sources/52 = SubResource("TileSetAtlasSource_iwmoh")
 sources/6 = SubResource("TileSetAtlasSource_8wf1x")
 sources/0 = SubResource("TileSetAtlasSource_m2dvf")
+sources/1 = SubResource("TileSetAtlasSource_1v1ya")
+sources/52 = SubResource("TileSetAtlasSource_u18k3")
+sources/49 = SubResource("TileSetAtlasSource_iwmoh")
+sources/50 = SubResource("TileSetAtlasSource_e7pua")
+sources/51 = SubResource("TileSetAtlasSource_88na8")

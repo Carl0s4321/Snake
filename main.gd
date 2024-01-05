@@ -3,12 +3,12 @@ extends Node
 
 var apple_pos
 var add_apples = false
-const APPLE = 0
+const APPLE = 1
 
-const SNAKE = 1
+const SNAKE = 2
 
-const ENEMY_BASIC = 2
-const ENEMY_HUNTER = 3
+const ENEMY_BASIC = 3
+const ENEMY_HUNTER = 4
 
 const DEAD = 0
 const ALIVE = 1
@@ -134,16 +134,24 @@ func draw_still_snake(layer, snake):
 			elif previous_block.y == next_block.y:
 				set_snake(block, layer, "body-horizontal") 
 			else:
-				
-				if previous_block.x == -1 and next_block.y == -1 or next_block.x == -1 and previous_block.y == -1:
+				var compress = previous_block + next_block
+				if compress.x == -1 and compress.y == -1:
 					set_snake(block, layer, "body-nw")
-				elif previous_block.x == -1 and next_block.y == 1 or next_block.x == -1 and previous_block.y == 1:
+				elif compress.x == -1 and compress.y == 1:
 					set_snake(block, layer, "body-sw")
-				elif previous_block.x == 1 and next_block.y == -1 or next_block.x == 1 and previous_block.y == -1:
+				elif compress.x == 1 and compress.y == -1:
 					set_snake(block, layer, "body-ne")
-				elif previous_block.x == 1 and next_block.y == 1 or next_block.x == 1 and previous_block.y == 1:
+				elif compress.x == 1 and compress.y == 1:
 					set_snake(block, layer, "body-se")
-					
+				#screen wrap
+				elif compress.x == -1 and compress.y == 24 or compress.x == 24 and compress.y == -1:
+					set_snake(block, layer, "body-nw")
+				elif compress.x == -1 and compress.y == -24 or compress.x == 24 and compress.y == 1:
+					set_snake(block, layer, "body-sw")
+				elif compress.x == 1 and compress.y == 24 or compress.x == -24 and compress.y == -1:
+					set_snake(block, layer, "body-ne")
+				elif compress.x == 1 and compress.y == -24 or compress.x == -24 and compress.y == 1:
+					set_snake(block, layer, "body-se")
 func draw_snake(layer, snake):
 	if snake["status"] == DEAD: return
 	if snake["status"] == DYING:
@@ -151,7 +159,7 @@ func draw_snake(layer, snake):
 		draw_still_snake(layer, snake)
 		snake["status"] = DEAD
 	#for block in snake_body:
-		#$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE, Vector2i(3,0), 0)
+		#$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE, Vector2i(0,0), 0)
 	for block_index in snake["body"].size():
 		var block = snake["body"][block_index]
 		
@@ -180,6 +188,8 @@ func draw_snake(layer, snake):
 			#turning has occurred
 			var previous_block = snake["body"][block_index + 1] - block
 			var next_block = snake["body"][block_index - 1] - block
+			var compress = previous_block + next_block
+			
 			if previous_block.x == -1 and next_block.y == -1:
 				set_snake(block, layer, "nw-turn-up")
 			elif next_block.x == -1 and previous_block.y == -1:
@@ -196,6 +206,24 @@ func draw_snake(layer, snake):
 				set_snake(block, layer, "se-turn-down")
 			elif next_block.x == 1 and previous_block.y == 1:
 				set_snake(block, layer, "se-turn-right")
+			#screen wrap turning (also impossible for next_block to have 24 as any value)
+			elif compress.x == 24 and compress.y == -1:
+				set_snake(block, layer, "nw-turn-up")#yes
+			elif compress.x == -1 and compress.y == 24:
+				set_snake(block, layer, "nw-turn-left")#yes
+			elif compress.x == 24 and compress.y == 1:
+				set_snake(block, layer, "sw-turn-down")#yes
+			elif compress.x == -1 and compress.y == -24:
+				set_snake(block, layer, "sw-turn-left")#yes
+			elif compress.x == -24 and compress.y == -1:
+				set_snake(block, layer, "ne-turn-up")#yes
+			elif compress.x == 1 and compress.y == 24:
+				set_snake(block, layer, "ne-turn-right")#yes
+			elif compress.x == -24 and compress.y == 1:
+				set_snake(block, layer, "se-turn-down") #yes
+			elif compress.x == 1 and compress.y == -24:
+				set_snake(block, layer, "se-turn-right")#yes
+			
 			#no turning has occured
 			elif head_dir == 'right': 
 				set_snake(block, layer, "head-exit-right")
@@ -211,6 +239,8 @@ func draw_snake(layer, snake):
 			#tail_dir = which direction the end tail points to
 			var previous_block = snake["body"][block_index + 1] - block
 			var next_block = snake["body"][block_index - 1] - block
+			var compress = previous_block + next_block
+			#order matters
 			if previous_block.x == -1 and next_block.y == -1:
 				set_snake(block, layer, "nw-move-up")
 			elif next_block.x == -1 and previous_block.y == -1:
@@ -227,6 +257,25 @@ func draw_snake(layer, snake):
 				set_snake(block, layer, "se-move-down")
 			elif next_block.x == 1 and previous_block.y == 1:
 				set_snake(block, layer, "se-move-right")
+				
+			#screen wrap turning (also impossible for next_block to have 24 as any value)
+			elif (next_block.x == 24 and previous_block.y == -1) or (next_block.x == -1 and previous_block.y == 24):
+				set_snake(block, layer, "nw-move-left")#yes
+			elif (previous_block.x == -1 and next_block.y == 24) or (previous_block.x == 24 and next_block.y == -1):
+				set_snake(block, layer, "nw-move-up")#yes
+			elif (next_block.x == 24 and previous_block.y == 1) or (next_block.x == -1 and previous_block.y == -24):
+				set_snake(block, layer, "sw-move-left")#yes
+			elif (previous_block.x == -1 and next_block.y == -24) or (previous_block.x == 24 and next_block.y == 1):
+				set_snake(block, layer, "sw-move-down")#yes
+			elif (next_block.x == -24 and previous_block.y == -1) or (next_block.x == 1 and previous_block.y == 24):
+				set_snake(block, layer, "ne-move-right")#yes
+			elif (previous_block.x == 1 and next_block.y == 24) or (previous_block.x == -24 and next_block.y == -1):
+				set_snake(block, layer, "ne-move-up")#yes
+			elif (next_block.x == -24 and previous_block.y == 1) or (next_block.x == 1 and previous_block.y == -24):
+				set_snake(block, layer, "se-move-right") #yes
+			elif (previous_block.x == 1 and next_block.y == -24) or (previous_block.x == -24 and next_block.y == 1):
+				set_snake(block, layer, "se-move-down")#yes
+				
 			#no turning has occured
 			elif tail_dir == 'right': 
 				set_snake(block, layer, "body-move-left")
@@ -241,13 +290,13 @@ func draw_snake(layer, snake):
 			var tail_dir = relation2(snake["body"][-1], snake["body"][-2])
 			#tail_dir = which direction the end tail points to
 			if tail_dir == 'right': 
-				set_snake(block, layer, "tail-move-left")
-			elif tail_dir == 'left': 
 				set_snake(block, layer, "tail-move-right")
+			elif tail_dir == 'left': 
+				set_snake(block, layer, "tail-move-left")
 			elif tail_dir == 'up': 
-				set_snake(block, layer, "tail-move-down")
-			elif tail_dir == 'down': 
 				set_snake(block, layer, "tail-move-up")
+			elif tail_dir == 'down': 
+				set_snake(block, layer, "tail-move-down")
 		else:
 			var previous_block = snake["body"][block_index + 1] - block
 			var next_block = snake["body"][block_index - 1] - block
@@ -258,18 +307,32 @@ func draw_snake(layer, snake):
 			elif previous_block.y == next_block.y:
 				set_snake(block, layer, "body-horizontal") 
 			else:
-				
-				if previous_block.x == -1 and next_block.y == -1 or next_block.x == -1 and previous_block.y == -1:
+				var compress = previous_block + next_block
+				if compress.x == -1 and compress.y == -1:
 					set_snake(block, layer, "body-nw")
-				elif previous_block.x == -1 and next_block.y == 1 or next_block.x == -1 and previous_block.y == 1:
+				elif compress.x == -1 and compress.y == 1:
 					set_snake(block, layer, "body-sw")
-				elif previous_block.x == 1 and next_block.y == -1 or next_block.x == 1 and previous_block.y == -1:
+				elif compress.x == 1 and compress.y == -1:
 					set_snake(block, layer, "body-ne")
-				elif previous_block.x == 1 and next_block.y == 1 or next_block.x == 1 and previous_block.y == 1:
+				elif compress.x == 1 and compress.y == 1:
 					set_snake(block, layer, "body-se")
-					
-func set_snake(block, layer, part_type):
-	$SnakeApple.set_cell(layer, Vector2i(block.x, block.y), TILE_PARTS[part_type], Vector2i(0,0), 0)
+				#screen wrapping
+				#nw (-1,24) (24,-1) (24,-1) (-1,24)
+				elif compress.x == -1 and compress.y == 24 or compress.x == 24 and compress.y == -1:
+					set_snake(block, layer, "body-nw")
+				elif compress.x == -1 and compress.y == -24 or compress.x == 24 and compress.y == 1:
+					set_snake(block, layer, "body-sw")
+				elif compress.x == 1 and compress.y == 24 or compress.x == -24 and compress.y == -1:
+					set_snake(block, layer, "body-ne")
+				elif compress.x == 1 and compress.y == -24 or compress.x == -24 and compress.y == 1:
+					set_snake(block, layer, "body-se")
+func set_snake_int(block, layer, part_type : int):
+	#if it would place it out of bounds, wrap it
+	var x = wrapi(block.x, 0 ,25)
+	var y = wrapi(block.y, 0 ,25)
+	$SnakeApple.set_cell(layer, Vector2i(x, y), part_type, Vector2i(0,0), 0)
+func set_snake(block, layer, part_name : String):
+	set_snake_int(block, layer, TILE_PARTS[part_name])
 	
 func relation2(first_block: Vector2, second_block: Vector2):
 	var block_relation = second_block - first_block
@@ -277,6 +340,11 @@ func relation2(first_block: Vector2, second_block: Vector2):
 	elif block_relation == Vector2(1,0): return 'left'
 	elif block_relation == Vector2(0,1): return 'up'
 	elif block_relation == Vector2(0,-1): return 'down'
+	#screen wrap
+	elif block_relation == Vector2(-24,0): return 'left'
+	elif block_relation == Vector2(24,0): return 'right'
+	elif block_relation == Vector2(0,24): return 'down'
+	elif block_relation == Vector2(0,-24): return 'up'
 
 func move_snake(layer, snake):
 	if snake["status"] == DEAD: return
@@ -362,20 +430,43 @@ func check_collision(position):
 		if id != -1:
 			return id
 	return -1
+
+var recently_pressed = 0
 func _input(event):
-	if Input.is_action_just_pressed("ui_up") and previous_direction != "down":
-		player_snake["direction"] = Vector2(0, -1)
-	elif Input.is_action_just_pressed("ui_down") and previous_direction != "up":
-		player_snake["direction"] = Vector2(0, 1)
-	elif Input.is_action_just_pressed("ui_left") and previous_direction != "right":
-		player_snake["direction"] = Vector2(-1, 0)
-	elif Input.is_action_just_pressed("ui_right") and previous_direction != "left":
-		player_snake["direction"] = Vector2(1, 0)
+	#smoother movement
+	if Input.is_action_just_pressed("ui_down") or Input.is_action_just_pressed("ui_up"):
+		recently_pressed = 1
+	if Input.is_action_just_pressed("ui_left") or Input.is_action_just_pressed("ui_right"):
+		recently_pressed = -1
+	if Input.is_action_just_released("ui_down") or Input.is_action_just_released("ui_up") or Input.is_action_just_released("ui_left") or Input.is_action_just_released("ui_right"):
+		recently_pressed = 0
+		
+	var vertical = int(signf(Input.get_axis("ui_down","ui_up")))
+	var horizontal = int(signf(Input.get_axis("ui_left","ui_right")))
+	if recently_pressed == 1:
+		if vertical == 1 and previous_direction != "down":
+			player_snake["direction"] = Vector2(0, -1)
+		if vertical == -1 and previous_direction != "up":
+			player_snake["direction"] = Vector2(0, 1)
+	elif recently_pressed == -1:
+		if horizontal == -1 and previous_direction != "right":
+			player_snake["direction"] = Vector2(-1, 0)
+		if horizontal == 1 and previous_direction != "left":
+			player_snake["direction"] = Vector2(1, 0)
+	else:
+		if vertical == 1 and previous_direction != "down":
+			player_snake["direction"] = Vector2(0, -1)
+		if vertical == -1 and previous_direction != "up":
+			player_snake["direction"] = Vector2(0, 1)
+		if horizontal == -1 and previous_direction != "right":
+			player_snake["direction"] = Vector2(-1, 0)
+		if horizontal == 1 and previous_direction != "left":
+			player_snake["direction"] = Vector2(1, 0)
 	
 
 func _ready():
 	apple_pos = place_apple()
-		#$SnakeApple.set_cell(0,Vector2i(0,0),1,Vector2i(4,0),0)
+		#$SnakeApple.set_cell(0,Vector2i(0,0),1,Vector2i(0,0),0)
 	
 func place_apple():
 	randomize()
@@ -388,21 +479,31 @@ func draw_apple():
 	
 func check_snake_out_of_map(snake):
 	var head = snake["body"][0]
+	
 	if head.x > 24:
-		for i in range(snake["body"].size()-1):
-			snake["body"][i].x = -i
+		#for i in range(snake["body"].size()-1):
+		#delete_tiles(snake["body"][0], snake["type"])
+		snake["body"][0].x = 0
 	elif head.x < 0:
-		for i in range(snake["body"].size()-1):
-			snake["body"][i].x = 24+i
+		#delete_tiles(snake["body"][0], snake["type"])
+		#for i in range(snake["body"].size()-1):
+		snake["body"][0].x = 24
 	elif head.y > 24:
-		for i in range(snake["body"].size()-1):
-			snake["body"][i].y = -i
+		#delete_tiles(snake["body"][0], snake["type"])
+		#for i in range(snake["body"].size()-1):
+		snake["body"][0].y = 0
 	elif head.y < 0:
-		for i in range(snake["body"].size()-1):
-			snake["body"][i].y = 24+i
+		#delete_tiles(snake["body"][0], snake["type"])
+		#for i in range(snake["body"].size()-1):
+		snake["body"][0].y = 24
 
 func check_apple_eaten():
 	if apple_pos == player_snake["body"][1]:
+		var tile = $SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-1])
+		if(tile == 50 or tile == 51): tile = 7
+		if(tile == 49 or tile == 52): tile = 12
+		set_snake_int(player_snake["body"][-2], SNAKE, tile)
+		set_snake_int(player_snake["body"][-1], SNAKE, $SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-1])-31)
 		delete_tiles(apple_pos, APPLE)
 		apple_pos = place_apple()
 		add_apples = true
