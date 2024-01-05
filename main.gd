@@ -1,6 +1,9 @@
 extends Node2D
 
-const SNAKE = 1
+#const SNAKE = 1
+const APPLE = 0
+var apple_pos
+var add_apples = false
 
 const SNAKE_PARTS = {
 	"empty":6,
@@ -184,19 +187,35 @@ func relation2(first_block: Vector2, second_block: Vector2):
 	elif block_relation == Vector2(0,-1): return 'down'
 
 func move_snake():
-	delete_tiles(SNAKE_PARTS["tail-move-up"])
-	delete_tiles(SNAKE_PARTS["tail-move-down"])
-	delete_tiles(SNAKE_PARTS["tail-move-left"])
-	delete_tiles(SNAKE_PARTS["tail-move-right"])
-	delete_tiles(SNAKE_PARTS["tail-up"])
-	delete_tiles(SNAKE_PARTS["tail-down"])
-	delete_tiles(SNAKE_PARTS["tail-left"])
-	delete_tiles(SNAKE_PARTS["tail-right"])
-	# take everything except the last index in the body (tail)
-	var body_copy = snake_body.slice(0,snake_body.size()-1)
-	var new_head = body_copy[0] + snake_direction
-	body_copy.insert(0, new_head)
-	snake_body = body_copy
+	if add_apples:
+		delete_tiles(SNAKE_PARTS["tail-move-up"])
+		delete_tiles(SNAKE_PARTS["tail-move-down"])
+		delete_tiles(SNAKE_PARTS["tail-move-left"])
+		delete_tiles(SNAKE_PARTS["tail-move-right"])
+		delete_tiles(SNAKE_PARTS["tail-up"])
+		delete_tiles(SNAKE_PARTS["tail-down"])
+		delete_tiles(SNAKE_PARTS["tail-left"])
+		delete_tiles(SNAKE_PARTS["tail-right"])
+		# take everything except the last index in the body (tail)
+		var body_copy = snake_body.slice(0,snake_body.size())
+		var new_head = body_copy[0] + snake_direction
+		body_copy.insert(0, new_head)
+		snake_body = body_copy
+		add_apples = false
+	else:
+		delete_tiles(SNAKE_PARTS["tail-move-up"])
+		delete_tiles(SNAKE_PARTS["tail-move-down"])
+		delete_tiles(SNAKE_PARTS["tail-move-left"])
+		delete_tiles(SNAKE_PARTS["tail-move-right"])
+		delete_tiles(SNAKE_PARTS["tail-up"])
+		delete_tiles(SNAKE_PARTS["tail-down"])
+		delete_tiles(SNAKE_PARTS["tail-left"])
+		delete_tiles(SNAKE_PARTS["tail-right"])
+		# take everything except the last index in the body (tail)
+		var body_copy = snake_body.slice(0,snake_body.size()-1)
+		var new_head = body_copy[0] + snake_direction
+		body_copy.insert(0, new_head)
+		snake_body = body_copy
 
 func delete_tiles(id: int):
 	var cells = $SnakeApple.get_used_cells_by_id(0, id)
@@ -216,10 +235,25 @@ func _input(event):
 	
 
 func _ready():
-	pass
-	#$SnakeApple.set_cell(0,Vector2i(0,0),1,Vector2i(4,0),0)
+	apple_pos = place_apple()
+		#$SnakeApple.set_cell(0,Vector2i(0,0),1,Vector2i(4,0),0)
 	
+func place_apple():
+	randomize()
+	var x = randi() % 24
+	var y = randi() % 24
+	return Vector2(x,y)
+	
+func draw_apple():
+	$SnakeApple.set_cell(0, Vector2i(apple_pos.x, apple_pos.y), APPLE, Vector2i(4,1),0)
+
+func check_apple_eaten():
+	if apple_pos == snake_body[0]:
+		apple_pos = place_apple()
+		add_apples = true
 
 func _on_snake_tick_timeout():
 	move_snake()
 	draw_snake()
+	draw_apple()
+	check_apple_eaten()
