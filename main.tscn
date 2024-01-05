@@ -3,7 +3,7 @@
 [ext_resource type="TileSet" uid="uid://cinvy7px11onv" path="res://art/snake-tiles.tres" id="1_hpxk8"]
 [ext_resource type="Script" path="res://main.gd" id="1_uqj7q"]
 [ext_resource type="Texture2D" uid="uid://bp88n62ebkwgm" path="res://art/grass.png" id="2_8wsrp"]
-[ext_resource type="PackedScene" uid="uid://bhbv3tssospvd" path="res://score.tscn" id="4_7meve"]
+[ext_resource type="PackedScene" path="res://score.tscn" id="4_7meve"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_uqj7q")
@@ -22,6 +22,16 @@ stretch_mode = 1
 [node name="SnakeApple" type="TileMap" parent="."]
 tile_set = ExtResource("1_hpxk8")
 format = 2
+layer_0/name = "apple"
+layer_1/name = "player"
+layer_1/modulate = Color(0.415686, 0.745098, 0.188235, 1)
+layer_1/tile_data = PackedInt32Array()
+layer_2/name = "enemy"
+layer_2/modulate = Color(0.741176, 0.192157, 0.192157, 1)
+layer_2/tile_data = PackedInt32Array()
+layer_3/name = "hunter"
+layer_3/modulate = Color(0.729412, 0.741176, 0.192157, 1)
+layer_3/tile_data = PackedInt32Array()
 
 [node name="SnakeTick" type="Timer" parent="."]
 wait_time = 0.2

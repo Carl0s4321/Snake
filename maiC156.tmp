@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://gige70kcqqq1"]
+
+[ext_resource type="TileSet" uid="uid://cinvy7px11onv" path="res://art/snake-tiles.tres" id="1_hpxk8"]
+[ext_resource type="Script" path="res://main.gd" id="1_uqj7q"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_uqj7q")
+
+[node name="SnakeApple" type="TileMap" parent="."]
+tile_set = ExtResource("1_hpxk8")
+format = 2
+layer_0/name = "player"
+layer_0/modulate = Color(0.415686, 0.745098, 0.188235, 1)
+layer_1/name = "enemy"
+layer_1/modulate = Color(0.741176, 0.192157, 0.192157, 1)
+layer_1/tile_data = PackedInt32Array()
+
+[node name="SnakeTick" type="Timer" parent="."]
+wait_time = 0.2
+autostart = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(200, 200)
+zoom = Vector2(2, 2)
+
+[connection signal="timeout" from="SnakeTick" to="." method="_on_snake_tick_timeout"]

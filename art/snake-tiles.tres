@@ -1,7 +1,7 @@
 [gd_resource type="TileSet" load_steps=96 format=3 uid="uid://cinvy7px11onv"]
 
-[ext_resource type="Texture2D" uid="uid://lpri6uqn463r" path="res://art/food.png" id="1_hrq7b"]
 [ext_resource type="Texture2D" uid="uid://dbdhego68ion4" path="res://art/snake-body-se.png" id="1_ikqb2"]
+[ext_resource type="Texture2D" path="res://art/apple.png" id="1_u1mdw"]
 [ext_resource type="Texture2D" uid="uid://b2go57es8umhs" path="res://art/snake-body-sw.png" id="2_hauhh"]
 [ext_resource type="Texture2D" uid="uid://cirguplgylqp3" path="res://art/snake-body-vertical.png" id="3_x4scv"]
 [ext_resource type="Texture2D" uid="uid://blc7qwbrdos4w" path="res://art/animations/snake-body-move-down-Sheet.png" id="4_xtnuk"]
@@ -48,72 +48,9 @@
 [ext_resource type="Texture2D" uid="uid://2a8xietm6rga" path="res://art/snake-body-ne.png" id="45_pqas2"]
 [ext_resource type="Texture2D" uid="uid://csemk46qtmlmo" path="res://art/snake-body-nw.png" id="46_upd5y"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wr0vu"]
-texture = ExtResource("1_hrq7b")
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m2dvf"]
+texture = ExtResource("1_u1mdw")
 0:0/0 = 0
-1:0/0 = 0
-2:0/0 = 0
-3:0/0 = 0
-4:0/0 = 0
-5:0/0 = 0
-6:0/0 = 0
-7:0/0 = 0
-0:1/0 = 0
-1:1/0 = 0
-2:1/0 = 0
-3:1/0 = 0
-4:1/0 = 0
-5:1/0 = 0
-6:1/0 = 0
-7:1/0 = 0
-0:2/0 = 0
-1:2/0 = 0
-2:2/0 = 0
-3:2/0 = 0
-4:2/0 = 0
-5:2/0 = 0
-6:2/0 = 0
-7:2/0 = 0
-0:3/0 = 0
-1:3/0 = 0
-2:3/0 = 0
-3:3/0 = 0
-4:3/0 = 0
-5:3/0 = 0
-6:3/0 = 0
-7:3/0 = 0
-0:4/0 = 0
-1:4/0 = 0
-2:4/0 = 0
-3:4/0 = 0
-4:4/0 = 0
-5:4/0 = 0
-6:4/0 = 0
-7:4/0 = 0
-0:5/0 = 0
-1:5/0 = 0
-2:5/0 = 0
-3:5/0 = 0
-4:5/0 = 0
-5:5/0 = 0
-6:5/0 = 0
-7:5/0 = 0
-0:6/0 = 0
-1:6/0 = 0
-2:6/0 = 0
-3:6/0 = 0
-4:6/0 = 0
-5:6/0 = 0
-6:6/0 = 0
-7:6/0 = 0
-0:7/0 = 0
-1:7/0 = 0
-2:7/0 = 0
-3:7/0 = 0
-4:7/0 = 0
-5:7/0 = 0
-6:7/0 = 0
-7:7/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gf2ne"]
 texture = ExtResource("1_ikqb2")
@@ -896,4 +833,4 @@ sources/50 = SubResource("TileSetAtlasSource_88na8")
 sources/51 = SubResource("TileSetAtlasSource_e7pua")
 sources/52 = SubResource("TileSetAtlasSource_iwmoh")
 sources/6 = SubResource("TileSetAtlasSource_8wf1x")
-sources/0 = SubResource("TileSetAtlasSource_wr0vu")
+sources/0 = SubResource("TileSetAtlasSource_m2dvf")

@@ -1,11 +1,21 @@
 extends Node
 
-#const SNAKE = 1
-const APPLE = 0
+
 var apple_pos
 var add_apples = false
+const APPLE = 0
 
-const SNAKE_PARTS = {
+const SNAKE = 1
+
+const ENEMY_BASIC = 2
+const ENEMY_HUNTER = 3
+
+const DEAD = 0
+const ALIVE = 1
+const DYING = 2
+
+const TILE_PARTS = {
+	"apple":0,
 	"empty":6,
 	"body-horizontal":7,
 	"body-ne":8,
@@ -56,128 +66,210 @@ const SNAKE_PARTS = {
 	
 }
 
-var snake_body = [Vector2(5,10),Vector2(4,10),Vector2(3,10),Vector2(2,10)]
-var snake_direction  = Vector2(1,0)
+var player_snake = {
+	"status":ALIVE,
+	"type":SNAKE,
+	"basic_turn":randi_range(1,10),
+	"direction":Vector2(1,0),
+	"body":[Vector2(5,10),Vector2(4,10),Vector2(3,10),Vector2(2,10)]
+}
 var previous_direction = "right"
-func draw_snake():
-	#for block in snake_body:
-		#$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE, Vector2i(3,0), 0)
-	for block_index in snake_body.size():
-		var block = snake_body[block_index]
+
+var enemy_snakes = [
+	{
+		"status":ALIVE,
+		"type":ENEMY_BASIC,
+		"basic_turn":randi_range(1,10),
+		"direction":Vector2(-1,0),
+	 	"body":[Vector2(17,5),Vector2(18,5),Vector2(19,5),Vector2(20,5),Vector2(21,5),Vector2(22,5)]
+		
+	},
+	{
+		"status":ALIVE,
+		"type":ENEMY_HUNTER,
+		"basic_turn":randi_range(1,10),
+		"direction":Vector2(-1,0),
+	 	"body":[Vector2(17,10),Vector2(18,10),Vector2(19,10),Vector2(20,10),Vector2(21,10),Vector2(22,10)]
+		#"direction":Vector2(0,1),
+		
+	 	#"body":[Vector2(5,5),Vector2(5,4),Vector2(5,3),Vector2(5,2)]
+	}
+	]
+	
+	
+func draw_still_snake(layer, snake):
+	for block_index in snake["body"].size():
+		var block = snake["body"][block_index]
 		
 		#head
 		if block_index == 0:
-			var head_dir = relation2(snake_body[0], snake_body[1])
+			var head_dir = relation2(snake["body"][0], snake["body"][1])
 			if head_dir == 'right': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-right"], Vector2i(0,0), 0)
-				previous_direction = "right"
+				set_snake(block, layer, "head-right")
 			elif head_dir == 'left': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-left"], Vector2i(0,0), 0)
-				previous_direction = "left"
+				set_snake(block, layer, "head-left")
 			elif head_dir == 'up': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-up"], Vector2i(0,0), 0)
-				previous_direction = "up"
+				set_snake(block, layer, "head-up")
 			elif head_dir == 'down': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-move-down"], Vector2i(0,0), 0)
-				previous_direction = "down"
-			
-		#head -> body
-		elif block_index == 1:
-			var head_dir = relation2(snake_body[0], snake_body[1])
-			#turning has occurred
-			var previous_block = snake_body[block_index + 1] - block
-			var next_block = snake_body[block_index - 1] - block
-			if previous_block.x == -1 and next_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["nw-turn-up"], Vector2i(0,0), 0)
-			elif next_block.x == -1 and previous_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["nw-turn-left"], Vector2i(0,0), 0)
-			elif previous_block.x == -1 and next_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["sw-turn-down"], Vector2i(0,0), 0)
-			elif next_block.x == -1 and previous_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["sw-turn-left"], Vector2i(0,0), 0)
-			elif previous_block.x == 1 and next_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["ne-turn-up"], Vector2i(0,0), 0)
-			elif next_block.x == 1 and previous_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["ne-turn-right"], Vector2i(0,0), 0)
-			elif previous_block.x == 1 and next_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["se-turn-down"], Vector2i(0,0), 0)
-			elif next_block.x == 1 and previous_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["se-turn-right"], Vector2i(0,0), 0)
-			#no turning has occured
-			elif head_dir == 'right': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-exit-right"], Vector2i(0,0), 0)
-			elif head_dir == 'left': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-exit-left"], Vector2i(0,0), 0)
-			elif head_dir == 'up': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-exit-up"], Vector2i(0,0), 0)
-			elif head_dir == 'down': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["head-exit-down"], Vector2i(0,0), 0)
-	#body -> tail
-		elif block_index == snake_body.size()-2:
-			var tail_dir = relation2(snake_body[-1], snake_body[-2])
-			#tail_dir = which direction the end tail points to
-			var previous_block = snake_body[block_index + 1] - block
-			var next_block = snake_body[block_index - 1] - block
-			if previous_block.x == -1 and next_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["nw-move-up"], Vector2i(0,0), 0)
-			elif next_block.x == -1 and previous_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["nw-move-left"], Vector2i(0,0), 0)
-			elif previous_block.x == -1 and next_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["sw-move-down"], Vector2i(0,0), 0)
-			elif next_block.x == -1 and previous_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["sw-move-left"], Vector2i(0,0), 0)
-			elif previous_block.x == 1 and next_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["ne-move-up"], Vector2i(0,0), 0)
-			elif next_block.x == 1 and previous_block.y == -1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["ne-move-right"], Vector2i(0,0), 0)
-			elif previous_block.x == 1 and next_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["se-move-down"], Vector2i(0,0), 0)
-			elif next_block.x == 1 and previous_block.y == 1:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["se-move-right"], Vector2i(0,0), 0)
-			#no turning has occured
-			elif tail_dir == 'right': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-move-left"], Vector2i(0,0), 0)
-			elif tail_dir == 'left': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-move-right"], Vector2i(0,0), 0)
-			elif tail_dir == 'up': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-move-down"], Vector2i(0,0), 0)
-			elif tail_dir == 'down': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-move-up"], Vector2i(0,0), 0)
-		
+				set_snake(block, layer, "head-down")
 		#tail
-		elif block_index == snake_body.size()-1:
-			var tail_dir = relation2(snake_body[-1], snake_body[-2])
+		elif block_index == snake["body"].size()-1:
+			var tail_dir = relation2(snake["body"][-1], snake["body"][-2])
 			#tail_dir = which direction the end tail points to
 			if tail_dir == 'right': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["tail-move-left"], Vector2i(0,0), 0)
+				set_snake(block, layer, "tail-right")
 			elif tail_dir == 'left': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["tail-move-right"], Vector2i(0,0), 0)
+				set_snake(block, layer, "tail-left")
 			elif tail_dir == 'up': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["tail-move-down"], Vector2i(0,0), 0)
+				set_snake(block, layer, "tail-up")
 			elif tail_dir == 'down': 
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["tail-move-up"], Vector2i(0,0), 0)
+				set_snake(block, layer, "tail-down")
 		else:
-			var previous_block = snake_body[block_index + 1] - block
-			var next_block = snake_body[block_index - 1] - block
+			var previous_block = snake["body"][block_index + 1] - block
+			var next_block = snake["body"][block_index - 1] - block
 			#going vertical
 			if previous_block.x == next_block.x:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-vertical"], Vector2i(0,0), 0)
+				set_snake(block, layer, "body-vertical")
 			#going horizontal
 			elif previous_block.y == next_block.y:
-				$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-horizontal"], Vector2i(0,0), 0) 
+				set_snake(block, layer, "body-horizontal") 
 			else:
 				
 				if previous_block.x == -1 and next_block.y == -1 or next_block.x == -1 and previous_block.y == -1:
-					$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-nw"], Vector2i(0,0), 0)	
-				
+					set_snake(block, layer, "body-nw")
 				elif previous_block.x == -1 and next_block.y == 1 or next_block.x == -1 and previous_block.y == 1:
-					$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-sw"], Vector2i(0,0), 0)		
-				
+					set_snake(block, layer, "body-sw")
 				elif previous_block.x == 1 and next_block.y == -1 or next_block.x == 1 and previous_block.y == -1:
-					$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-ne"], Vector2i(0,0), 0)	
-				
+					set_snake(block, layer, "body-ne")
 				elif previous_block.x == 1 and next_block.y == 1 or next_block.x == 1 and previous_block.y == 1:
-					$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE_PARTS["body-se"], Vector2i(0,0), 0)	
+					set_snake(block, layer, "body-se")
+					
+func draw_snake(layer, snake):
+	if snake["status"] == DEAD: return
+	if snake["status"] == DYING:
+		#draw still parts
+		draw_still_snake(layer, snake)
+		snake["status"] = DEAD
+	#for block in snake_body:
+		#$SnakeApple.set_cell(0, Vector2i(block.x, block.y), SNAKE, Vector2i(3,0), 0)
+	for block_index in snake["body"].size():
+		var block = snake["body"][block_index]
+		
+		#head
+		if block_index == 0:
+			var head_dir = relation2(snake["body"][0], snake["body"][1])
+			var direction = "none"
+			if head_dir == 'right': 
+				set_snake(block, layer, "head-move-right")
+				direction = "right"
+			elif head_dir == 'left': 
+				set_snake(block, layer, "head-move-left")
+				direction = "left"
+			elif head_dir == 'up': 
+				set_snake(block, layer, "head-move-up")
+				direction = "up"
+			elif head_dir == 'down': 
+				set_snake(block, layer, "head-move-down")
+				direction = "down"
+			
+			if direction != "none" and layer == SNAKE:
+				previous_direction = direction
+		#head -> body
+		elif block_index == 1:
+			var head_dir = relation2(snake["body"][0], snake["body"][1])
+			#turning has occurred
+			var previous_block = snake["body"][block_index + 1] - block
+			var next_block = snake["body"][block_index - 1] - block
+			if previous_block.x == -1 and next_block.y == -1:
+				set_snake(block, layer, "nw-turn-up")
+			elif next_block.x == -1 and previous_block.y == -1:
+				set_snake(block, layer, "nw-turn-left")
+			elif previous_block.x == -1 and next_block.y == 1:
+				set_snake(block, layer, "sw-turn-down")
+			elif next_block.x == -1 and previous_block.y == 1:
+				set_snake(block, layer, "sw-turn-left")
+			elif previous_block.x == 1 and next_block.y == -1:
+				set_snake(block, layer, "ne-turn-up")
+			elif next_block.x == 1 and previous_block.y == -1:
+				set_snake(block, layer, "ne-turn-right")
+			elif previous_block.x == 1 and next_block.y == 1:
+				set_snake(block, layer, "se-turn-down")
+			elif next_block.x == 1 and previous_block.y == 1:
+				set_snake(block, layer, "se-turn-right")
+			#no turning has occured
+			elif head_dir == 'right': 
+				set_snake(block, layer, "head-exit-right")
+			elif head_dir == 'left': 
+				set_snake(block, layer, "head-exit-left")
+			elif head_dir == 'up': 
+				set_snake(block, layer, "head-exit-up")
+			elif head_dir == 'down': 
+				set_snake(block, layer, "head-exit-down")
+	#body -> tail
+		elif block_index == snake["body"].size()-2:
+			var tail_dir = relation2(snake["body"][-1], snake["body"][-2])
+			#tail_dir = which direction the end tail points to
+			var previous_block = snake["body"][block_index + 1] - block
+			var next_block = snake["body"][block_index - 1] - block
+			if previous_block.x == -1 and next_block.y == -1:
+				set_snake(block, layer, "nw-move-up")
+			elif next_block.x == -1 and previous_block.y == -1:
+				set_snake(block, layer, "nw-move-left")
+			elif previous_block.x == -1 and next_block.y == 1:
+				set_snake(block, layer, "sw-move-down")
+			elif next_block.x == -1 and previous_block.y == 1:
+				set_snake(block, layer, "sw-move-left")
+			elif previous_block.x == 1 and next_block.y == -1:
+				set_snake(block, layer, "ne-move-up")
+			elif next_block.x == 1 and previous_block.y == -1:
+				set_snake(block, layer, "ne-move-right")
+			elif previous_block.x == 1 and next_block.y == 1:
+				set_snake(block, layer, "se-move-down")
+			elif next_block.x == 1 and previous_block.y == 1:
+				set_snake(block, layer, "se-move-right")
+			#no turning has occured
+			elif tail_dir == 'right': 
+				set_snake(block, layer, "body-move-left")
+			elif tail_dir == 'left': 
+				set_snake(block, layer, "body-move-right")
+			elif tail_dir == 'up': 
+				set_snake(block, layer, "body-move-down")
+			elif tail_dir == 'down': 
+				set_snake(block, layer, "body-move-up")
+		#tail
+		elif block_index == snake["body"].size()-1:
+			var tail_dir = relation2(snake["body"][-1], snake["body"][-2])
+			#tail_dir = which direction the end tail points to
+			if tail_dir == 'right': 
+				set_snake(block, layer, "tail-move-left")
+			elif tail_dir == 'left': 
+				set_snake(block, layer, "tail-move-right")
+			elif tail_dir == 'up': 
+				set_snake(block, layer, "tail-move-down")
+			elif tail_dir == 'down': 
+				set_snake(block, layer, "tail-move-up")
+		else:
+			var previous_block = snake["body"][block_index + 1] - block
+			var next_block = snake["body"][block_index - 1] - block
+			#going vertical
+			if previous_block.x == next_block.x:
+				set_snake(block, layer, "body-vertical")
+			#going horizontal
+			elif previous_block.y == next_block.y:
+				set_snake(block, layer, "body-horizontal") 
+			else:
+				
+				if previous_block.x == -1 and next_block.y == -1 or next_block.x == -1 and previous_block.y == -1:
+					set_snake(block, layer, "body-nw")
+				elif previous_block.x == -1 and next_block.y == 1 or next_block.x == -1 and previous_block.y == 1:
+					set_snake(block, layer, "body-sw")
+				elif previous_block.x == 1 and next_block.y == -1 or next_block.x == 1 and previous_block.y == -1:
+					set_snake(block, layer, "body-ne")
+				elif previous_block.x == 1 and next_block.y == 1 or next_block.x == 1 and previous_block.y == 1:
+					set_snake(block, layer, "body-se")
+					
+func set_snake(block, layer, part_type):
+	$SnakeApple.set_cell(layer, Vector2i(block.x, block.y), TILE_PARTS[part_type], Vector2i(0,0), 0)
 	
 func relation2(first_block: Vector2, second_block: Vector2):
 	var block_relation = second_block - first_block
@@ -186,40 +278,99 @@ func relation2(first_block: Vector2, second_block: Vector2):
 	elif block_relation == Vector2(0,1): return 'up'
 	elif block_relation == Vector2(0,-1): return 'down'
 
-func move_snake():
-	if add_apples:
-		for tiles in SNAKE_PARTS:
-			delete_tiles(SNAKE_PARTS[tiles])
-		# take everything except the last index in the body (tail)
-		var body_copy = snake_body.slice(0,snake_body.size())
-		var new_head = body_copy[0] + snake_direction
-		body_copy.insert(0, new_head)
-		snake_body = body_copy
+func move_snake(layer, snake):
+	if snake["status"] == DEAD: return
+	delete_tiles(snake["body"][-1], layer) #delete the tail
+	
+	var body_copy
+	if add_apples and layer == SNAKE: #if player
+		body_copy = snake["body"].slice(0,snake["body"].size())
 		add_apples = false
 	else:
-		for tiles in SNAKE_PARTS:
-			delete_tiles(SNAKE_PARTS[tiles])
 		# take everything except the last index in the body (tail)
-		var body_copy = snake_body.slice(0,snake_body.size()-1)
-		var new_head = body_copy[0] + snake_direction
-		body_copy.insert(0, new_head)
-		snake_body = body_copy
+		body_copy = snake["body"].slice(0,snake["body"].size()-1)
+	
+	var new_head = body_copy[0] + snake["direction"]
+	#detect collisions
+	var id = check_collision(new_head)
+	if id != -1:#not empty space
+		#if collision, attempt to move away
+		if snake["type"] != SNAKE:
+			var attempts = 1
+			while id != -1 and attempts > 0:
+				snake["direction"] = choose_direction([snake["direction"] * -1])
+				new_head = body_copy[0] + snake["direction"]
+				id = check_collision(new_head)
+				attempts -= 1
+			if id != -1:
+				kill_snake(layer, snake, body_copy)
+		else: #otherwise kill
+			kill_snake(layer, snake, body_copy)
+			return
+	
+	
+	body_copy.insert(0, new_head)
+	snake["body"] = body_copy
 
-func delete_tiles(id: int):
-	var cells = $SnakeApple.get_used_cells_by_id(0, id)
-	# -1 id is to delete the cell
-	for cell in cells:
-		$SnakeApple.set_cell(0, Vector2i(cell.x,cell.y), -1)
+func basic_enemy_movement(snake):
+	if snake["basic_turn"] <= 0:
+		snake["direction"] = choose_direction([snake["direction"] * -1])
+		snake["basic_turn"] = randi_range(0,10)
+	else:
+		snake["basic_turn"] -= 1
+func hunting_enemy_movement(snake):
+	var difference = (player_snake["body"][0]+(player_snake["direction"])) - snake["body"][0]
+	if abs(difference.x) > abs(difference.y):
+		snake["direction"] = Vector2(signi(difference.x), 0)
+	elif abs(difference.y) > abs(difference.x):
+		snake["direction"] = Vector2(0, signi(difference.y))
+	else:
+		var list = [Vector2(signi(difference.x), 0), Vector2(0, signi(difference.y))]
+		var vector = list[randi_range(0,1)]
+		snake["direction"] = vector
+	
+	#check if the future position will collide
+	var banned = [snake["direction"], snake["direction"]*-1]
+	var attempts = 3
+	while (check_collision(snake["body"][0] + snake["direction"]) != -1) and attempts > 0:
+		snake["direction"] = choose_direction(banned)
+		banned.append(snake["direction"])
+		attempts -= 1
 
+var possible_directions = [Vector2(1,0),Vector2(-1,0),Vector2(0,1),Vector2(0,-1)]
+func choose_direction(banned_directions : Array):
+	var direction = possible_directions[randi_range(0,3)]
+	var attempts = 10
+	while banned_directions.has(direction) and attempts > 0: #find a direction that is not banned
+		direction = possible_directions[randi_range(0,3)]
+		attempts -= 1
+	return direction
+
+func kill_snake(layer, snake, body_copy):
+	snake["body"] = body_copy
+	draw_still_snake(layer, snake)
+	snake["status"] = DEAD
+
+func delete_tiles(position, layer):
+	$SnakeApple.set_cell(layer, position, -1)
+		
+var collision_layers = [SNAKE, ENEMY_BASIC, ENEMY_HUNTER]
+#return true if collision happens
+func check_collision(position):
+	for i in collision_layers:
+		var id = $SnakeApple.get_cell_source_id(i, position)
+		if id != -1:
+			return id
+	return -1
 func _input(event):
 	if Input.is_action_just_pressed("ui_up") and previous_direction != "down":
-		snake_direction = Vector2(0, -1)
+		player_snake["direction"] = Vector2(0, -1)
 	elif Input.is_action_just_pressed("ui_down") and previous_direction != "up":
-		snake_direction = Vector2(0, 1)
+		player_snake["direction"] = Vector2(0, 1)
 	elif Input.is_action_just_pressed("ui_left") and previous_direction != "right":
-		snake_direction = Vector2(-1, 0)
+		player_snake["direction"] = Vector2(-1, 0)
 	elif Input.is_action_just_pressed("ui_right") and previous_direction != "left":
-		snake_direction = Vector2(1, 0)
+		player_snake["direction"] = Vector2(1, 0)
 	
 
 func _ready():
@@ -233,32 +384,45 @@ func place_apple():
 	return Vector2(x,y)
 	
 func draw_apple():
-	$SnakeApple.set_cell(0, Vector2i(apple_pos.x, apple_pos.y), APPLE, Vector2i(4,1),0)
+	$SnakeApple.set_cell(APPLE, Vector2i(apple_pos.x, apple_pos.y), 0, Vector2i(0,0),0)
 	
-func check_snake_out_of_map():
-	var head = snake_body[0]
+func check_snake_out_of_map(snake):
+	var head = snake["body"][0]
 	if head.x > 24:
-		for i in range(snake_body.size()-1):
-			snake_body[i].x = -i
+		for i in range(snake["body"].size()-1):
+			snake["body"][i].x = -i
 	elif head.x < 0:
-		for i in range(snake_body.size()-1):
-			snake_body[i].x = 24+i
+		for i in range(snake["body"].size()-1):
+			snake["body"][i].x = 24+i
 	elif head.y > 24:
-		for i in range(snake_body.size()-1):
-			snake_body[i].y = -i
+		for i in range(snake["body"].size()-1):
+			snake["body"][i].y = -i
 	elif head.y < 0:
-		for i in range(snake_body.size()-1):
-			snake_body[i].y = 24+i
+		for i in range(snake["body"].size()-1):
+			snake["body"][i].y = 24+i
 
 func check_apple_eaten():
-	if apple_pos == snake_body[0]:
+	if apple_pos == player_snake["body"][1]:
+		delete_tiles(apple_pos, APPLE)
 		apple_pos = place_apple()
 		add_apples = true
-		get_tree().call_group('ScoreGroup', 'update_score', snake_body.size())
+		get_tree().call_group('ScoreGroup', 'update_score', player_snake["body"].size())
 
 func _on_snake_tick_timeout():
-	move_snake()
-	draw_snake()
+
+	#player
+	move_snake(SNAKE, player_snake)
+	draw_snake(SNAKE, player_snake)
 	draw_apple()
 	check_apple_eaten()
-	check_snake_out_of_map()
+	check_snake_out_of_map(player_snake)
+	#enemies
+	for enemy in enemy_snakes:
+		var type = enemy["type"]
+		if(type == ENEMY_BASIC):
+			basic_enemy_movement(enemy)
+		elif(type == ENEMY_HUNTER):
+			hunting_enemy_movement(enemy)
+		move_snake(type, enemy)
+		draw_snake(type, enemy)
+		check_snake_out_of_map(enemy)
