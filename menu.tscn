@@ -1,0 +1,108 @@
+[gd_scene load_steps=8 format=3 uid="uid://cibbi4sxo2rxl"]
+
+[ext_resource type="Script" path="res://Control.gd" id="1_gxsrg"]
+[ext_resource type="Texture2D" uid="uid://bfyvh3o3eimwd" path="res://art/bg.png" id="1_kxvkd"]
+[ext_resource type="Script" path="res://AnimationPlayer.gd" id="3_o35mj"]
+[ext_resource type="FontFile" uid="uid://bkhk0aym7pks4" path="res://font/Lemon Days.ttf" id="4_htkk5"]
+
+[sub_resource type="Animation" id="Animation_i76ti"]
+resource_name = "moveBG"
+length = 5.3
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Rect2(0, 0, 800, 800), Rect2(530, 530, 800, 800)]
+}
+
+[sub_resource type="Animation" id="Animation_rttel"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 800, 800)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_heomu"]
+_data = {
+"RESET": SubResource("Animation_rttel"),
+"moveBG": SubResource("Animation_i76ti")
+}
+
+[node name="CanvasLayer" type="CanvasLayer"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_repeat = 2
+position = Vector2(400, 400)
+texture = ExtResource("1_kxvkd")
+region_enabled = true
+region_rect = Rect2(0, 0, 800, 800)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("../Sprite2D")
+libraries = {
+"": SubResource("AnimationLibrary_heomu")
+}
+script = ExtResource("3_o35mj")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 231.0
+offset_top = 223.0
+offset_right = 271.0
+offset_bottom = 263.0
+scale = Vector2(2.53555, 2.53555)
+script = ExtResource("1_gxsrg")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control"]
+layout_mode = 0
+offset_left = -5.91589
+offset_top = 64.6803
+offset_right = 135.084
+offset_bottom = 165.68
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/MarginContainer"]
+layout_mode = 2
+
+[node name="Start" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_htkk5")
+text = "Start"
+
+[node name="Settings" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_htkk5")
+text = "Settings"
+
+[node name="Quit" type="Button" parent="Control/MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("4_htkk5")
+text = "Quit"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 211.0
+offset_top = 206.0
+offset_right = 575.0
+offset_bottom = 368.0
+theme_override_fonts/font = ExtResource("4_htkk5")
+theme_override_font_sizes/font_size = 125
+text = "SNAKE"
+
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Start" to="Control" method="_on_start_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Settings" to="Control" method="_on_settings_pressed"]
+[connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Quit" to="Control" method="_on_quit_pressed"]
