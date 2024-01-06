@@ -4,6 +4,7 @@ extends Node
 var apple_pos
 var add_apples = false
 const APPLE = 1
+var timer = 120
 
 const SNAKE = 2
 
@@ -89,7 +90,7 @@ var enemy_snakes = [
 		"type":ENEMY_HUNTER,
 		"basic_turn":randi_range(1,10),
 		"direction":Vector2(-1,0),
-	 	"body":[Vector2(17,10),Vector2(18,10),Vector2(19,10),Vector2(20,10),Vector2(21,10),Vector2(22,10)]
+	 	"body":[Vector2(19,16),Vector2(20,16),Vector2(21,16),Vector2(22,16),Vector2(23,16),Vector2(24,16)]
 		#"direction":Vector2(0,1),
 		
 	 	#"body":[Vector2(5,5),Vector2(5,4),Vector2(5,3),Vector2(5,2)]
@@ -510,7 +511,6 @@ func check_apple_eaten():
 		get_tree().call_group('ScoreGroup', 'update_score', player_snake["body"].size())
 
 func _on_snake_tick_timeout():
-
 	#player
 	move_snake(SNAKE, player_snake)
 	draw_snake(SNAKE, player_snake)
@@ -527,3 +527,9 @@ func _on_snake_tick_timeout():
 		move_snake(type, enemy)
 		draw_snake(type, enemy)
 		check_snake_out_of_map(enemy)
+
+
+func _on_timer_timeout():
+	if timer > 0 :
+		timer -= 1
+	get_tree().call_group('ScoreGroup', 'update_timer', timer)
