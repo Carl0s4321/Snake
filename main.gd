@@ -4,7 +4,7 @@ extends Node
 var apple_pos
 var add_apples = false
 const APPLE = 1
-var timer = 120
+var timer = 0
 
 const SNAKE = 2
 
@@ -530,6 +530,5 @@ func _on_snake_tick_timeout():
 
 
 func _on_timer_timeout():
-	if timer > 0 :
-		timer -= 1
+	timer += 1
 	get_tree().call_group('ScoreGroup', 'update_timer', timer)
