@@ -1,4 +1,4 @@
-[gd_resource type="TileSet" load_steps=98 format=3 uid="uid://cinvy7px11onv"]
+[gd_resource type="TileSet" load_steps=100 format=3 uid="uid://cinvy7px11onv"]
 
 [ext_resource type="Texture2D" uid="uid://dbdhego68ion4" path="res://art/snake-body-se.png" id="1_ikqb2"]
 [ext_resource type="Texture2D" uid="uid://xi84jab164h8" path="res://art/apple.png" id="1_u1mdw"]
@@ -13,7 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://do7ec5bw4agey" path="res://art/snake-tail-left.png" id="10_ql8r6"]
 [ext_resource type="Texture2D" uid="uid://cpdo2fri76gte" path="res://art/snake-tail-right.png" id="11_effmh"]
 [ext_resource type="Texture2D" uid="uid://rm44ubmri5vj" path="res://art/snake-tail-up.png" id="12_ydnym"]
-[ext_resource type="Texture2D" path="res://art/meat.png" id="13_6xg2r"]
+[ext_resource type="Texture2D" uid="uid://c8obdpu34bfbp" path="res://art/meat.png" id="13_6xg2r"]
 [ext_resource type="Texture2D" uid="uid://47knct6ol031" path="res://art/animations/snake-body-move-left-Sheet.png" id="13_bhcwj"]
 [ext_resource type="Texture2D" uid="uid://cpxcoe2a6ffkg" path="res://art/animations/snake-body-move-right-Sheet.png" id="14_8svje"]
 [ext_resource type="Texture2D" uid="uid://ss74s0ciy6st" path="res://art/animations/snake-body-move-up-Sheet.png" id="15_32lij"]
@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://cu5cgigq7nt1m" path="res://art/animations/snake-head-move-down-Sheet.png" id="20_h4dr8"]
 [ext_resource type="Texture2D" uid="uid://bpp4ndkeft1dd" path="res://art/animations/snake-head-move-left-Sheet.png" id="21_rtkho"]
 [ext_resource type="Texture2D" uid="uid://nvgitt5l2kk" path="res://art/animations/snake-head-move-right-Sheet.png" id="22_hd4oj"]
+[ext_resource type="Texture2D" uid="uid://m8lkqbnak7al" path="res://art/warnings.png" id="23_rp86b"]
 [ext_resource type="Texture2D" uid="uid://gejjpdr3hg0y" path="res://art/animations/snake-head-move-up-Sheet.png" id="23_y4hu8"]
 [ext_resource type="Texture2D" uid="uid://blpl4ahyeq36e" path="res://art/animations/snake-ne-move-right-Sheet.png" id="24_lvmkc"]
 [ext_resource type="Texture2D" uid="uid://b73eigg225kqx" path="res://art/animations/snake-ne-move-up-Sheet.png" id="25_rhd70"]
@@ -289,6 +290,13 @@ texture = ExtResource("20_h4dr8")
 0:0/animation_frame_14/duration = 1.0
 0:0/animation_frame_15/duration = 1.0
 0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l6wqs"]
+texture = ExtResource("23_rp86b")
+0:0/0 = 0
+1:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lf73v"]
 texture = ExtResource("21_rtkho")
@@ -840,3 +848,4 @@ sources/49 = SubResource("TileSetAtlasSource_iwmoh")
 sources/50 = SubResource("TileSetAtlasSource_e7pua")
 sources/51 = SubResource("TileSetAtlasSource_88na8")
 sources/2 = SubResource("TileSetAtlasSource_uys0v")
+sources/3 = SubResource("TileSetAtlasSource_l6wqs")

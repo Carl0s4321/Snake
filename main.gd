@@ -83,7 +83,7 @@ var player_snake = {
 	"type":SNAKE,
 	"basic_turn":randi_range(1,10),
 	"direction":Vector2(1,0),
-	"body":[Vector2(5,10),Vector2(4,10),Vector2(3,10),Vector2(2,10)]
+	"body":[Vector2(3,10),Vector2(2,10),Vector2(1,10),Vector2(0,10)]
 }
 var previous_direction = "right"
 
@@ -629,6 +629,8 @@ func _ready():
 	apple_positions.push_back(Vector2(randi_range(0,24),randi_range(0,24)))
 	apple_positions.push_back(Vector2(randi_range(0,24),randi_range(0,24)))
 	
+	#pre_spawn player
+	draw_snake(SNAKE, player_snake)
 		#$SnakeApple.set_cell(0,Vector2i(0,0),1,Vector2i(0,0),0)
 	
 	
@@ -745,6 +747,15 @@ func set_cell(position : Vector2, layer : int, tile_part = "empty"):
 		if tile_positions[key][layer]["tile"] == null: return
 		tile_positions[key][layer]["tile"].queue_free()
 		tile_positions[key][layer] = {"name":"empty","tile":null}
+		if layer != FOOD:
+			if position.x == 0 or position.x == -1:
+				$SnakeApple.set_cell(0, Vector2i(24, position.y), -1)
+			elif position.x == 24 or position.x == 25:
+				$SnakeApple.set_cell(0, Vector2i(0, position.y), -1)
+			elif position.y == 0 or position.y == -1:
+				$SnakeApple.set_cell(0, Vector2i(position.x, 24), -1)
+			elif position.y == 24 or position.y == 25:
+				$SnakeApple.set_cell(0, Vector2i(position.x, 0), -1)
 		
 	else:
 		
@@ -767,6 +778,15 @@ func set_cell(position : Vector2, layer : int, tile_part = "empty"):
 		var previous = tile_positions[key][layer]["name"]
 		if previous != "empty":
 			tile_positions[key][layer]["tile"].queue_free()
+		if layer != FOOD:
+			if position.x == 0 or position.x == -1:
+				$SnakeApple.set_cell(0, Vector2i(24, position.y), 3, Vector2i(1,0),0)
+			elif position.x == 24 or position.x == 25:
+				$SnakeApple.set_cell(0, Vector2i(0, position.y), 3, Vector2i(0,1),0)
+			elif position.y == 0 or position.y == -1:
+				$SnakeApple.set_cell(0, Vector2i(position.x, 24), 3, Vector2i(1,1),0)
+			elif position.y == 24 or position.y == 25:
+				$SnakeApple.set_cell(0, Vector2i(position.x, 0), 3, Vector2i(0,0),0)
 		
 		tile_positions[key][layer] = {"name":tile_part,"tile":tile}
 		

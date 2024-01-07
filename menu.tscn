@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bt4ib8d0ocwap"]
+[gd_scene load_steps=11 format=3 uid="uid://bt4ib8d0ocwap"]
 
 [ext_resource type="Script" path="res://Control.gd" id="1_gxsrg"]
 [ext_resource type="Texture2D" uid="uid://bfyvh3o3eimwd" path="res://art/bg.png" id="1_kxvkd"]
 [ext_resource type="Script" path="res://AnimationPlayer.gd" id="3_o35mj"]
 [ext_resource type="FontFile" uid="uid://bkhk0aym7pks4" path="res://font/Lemon Days.ttf" id="4_htkk5"]
+[ext_resource type="Texture2D" uid="uid://dxsrg23jcpv4v" path="res://art/cursor.png" id="5_saeqj"]
+[ext_resource type="Texture2D" uid="uid://bp428d2l8tgno" path="res://art/empty.png" id="6_u8krb"]
 
 [sub_resource type="Animation" id="Animation_rttel"]
 length = 0.001
@@ -42,6 +44,13 @@ _data = {
 "RESET": SubResource("Animation_rttel"),
 "moveBG": SubResource("Animation_i76ti")
 }
+
+[sub_resource type="AnimatedTexture" id="AnimatedTexture_5c4rt"]
+frames = 2
+frame_0/texture = ExtResource("5_saeqj")
+frame_0/duration = 0.75
+frame_1/texture = ExtResource("6_u8krb")
+frame_1/duration = 0.25
 
 [node name="CanvasLayer" type="CanvasLayer"]
 
@@ -101,16 +110,42 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_htkk5")
 text = "Quit"
 
-[node name="Label" type="Label" parent="Control"]
-offset_left = -7.88783
-offset_top = -6.70466
-offset_right = 356.112
-offset_bottom = 155.295
+[node name="Title" type="Label" parent="Control"]
+offset_left = -21.6915
+offset_top = -47.7214
+offset_right = 342.308
+offset_bottom = 114.279
 scale = Vector2(0.394, 0.394)
 theme_override_fonts/font = ExtResource("4_htkk5")
 theme_override_font_sizes/font_size = 125
 text = "SNAKE"
 
+[node name="Title2" type="Label" parent="Control"]
+offset_left = 4.7327
+offset_top = -3.54952
+offset_right = 381.733
+offset_bottom = 158.45
+scale = Vector2(0.394, 0.394)
+theme_override_fonts/font = ExtResource("4_htkk5")
+theme_override_font_sizes/font_size = 125
+text = "SNACK"
+
+[node name="Cursor" type="TextureRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -230.0
+offset_top = -32.0
+offset_right = -198.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AnimatedTexture_5c4rt")
+
+[connection signal="mouse_entered" from="Control/MarginContainer/VBoxContainer/Start" to="Control" method="_on_start_mouse_entered"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Start" to="Control" method="_on_start_pressed"]
+[connection signal="mouse_entered" from="Control/MarginContainer/VBoxContainer/Settings" to="Control" method="_on_settings_mouse_entered"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Settings" to="Control" method="_on_settings_pressed"]
+[connection signal="mouse_entered" from="Control/MarginContainer/VBoxContainer/Quit" to="Control" method="_on_quit_mouse_entered"]
 [connection signal="pressed" from="Control/MarginContainer/VBoxContainer/Quit" to="Control" method="_on_quit_pressed"]

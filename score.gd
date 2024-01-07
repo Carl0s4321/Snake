@@ -1,6 +1,7 @@
 extends CanvasLayer
 
 #@onready var screen_size =  get_viewport().size
+var button_index = 0
 
 func update_score(score):
 	$HUD/ScoreText.text = str(score)
@@ -33,3 +34,30 @@ func _on_menu_pressed():
 
 func _on_main_game_over():
 	$GameOverMenu.visible = true
+
+func _input(event):
+	if Input.is_action_just_pressed("ui_up"):
+		button_index -= 1
+		
+	if Input.is_action_just_pressed("ui_down"):
+		button_index += 1
+	if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_select"):
+		if button_index == 0:
+			_on_continue_pressed()
+		elif button_index == 1:
+			_on_menu_pressed()
+
+	button_index = wrapi(button_index, 0, 2)
+	$GameOverMenu/Cursor.global_position.y = $GameOverMenu/Button.get_child(button_index).global_position.y + 24
+
+
+
+
+func _on_continue_mouse_entered():
+	button_index = 0
+	$GameOverMenu/Cursor.global_position.y = $GameOverMenu/Button.get_child(button_index).global_position.y + 24
+
+func _on_menu_mouse_entered():
+	button_index = 1
+	$GameOverMenu/Cursor.global_position.y = $GameOverMenu/Button.get_child(button_index).global_position.y + 24
+
