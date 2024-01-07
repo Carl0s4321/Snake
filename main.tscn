@@ -28,10 +28,9 @@ stretch_mode = 1
 
 [node name="Camera2D" type="Camera2D" parent="."]
 process_mode = 3
-position = Vector2(-11, -9)
 scale = Vector2(100, 100)
 anchor_mode = 0
-zoom = Vector2(1.9, 1.9)
+zoom = Vector2(2, 2)
 
 [node name="SnakeApple" parent="." instance=ExtResource("4_onn24")]
 self_modulate = Color(1, 1, 1, 0)

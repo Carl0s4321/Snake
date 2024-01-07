@@ -579,6 +579,7 @@ func check_collision(position):
 		var id = get_cell(position, i)
 		#var id = $SnakeApple.get_cell_source_id(i, position)
 		if id["tile"] != null:
+			if id["name"].contains("tail"): return null
 			return id
 	return null
 
