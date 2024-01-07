@@ -2,7 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://dbdhego68ion4" path="res://art/snake-body-se.png" id="1_ikqb2"]
 [ext_resource type="Texture2D" uid="uid://xi84jab164h8" path="res://art/apple.png" id="1_u1mdw"]
-[ext_resource type="Texture2D" uid="uid://bp88n62ebkwgm" path="res://art/grass.png" id="2_e7ayl"]
 [ext_resource type="Texture2D" uid="uid://b2go57es8umhs" path="res://art/snake-body-sw.png" id="2_hauhh"]
 [ext_resource type="Texture2D" uid="uid://cirguplgylqp3" path="res://art/snake-body-vertical.png" id="3_x4scv"]
 [ext_resource type="Texture2D" uid="uid://blc7qwbrdos4w" path="res://art/animations/snake-body-move-down-Sheet.png" id="4_xtnuk"]
@@ -14,6 +13,7 @@
 [ext_resource type="Texture2D" uid="uid://do7ec5bw4agey" path="res://art/snake-tail-left.png" id="10_ql8r6"]
 [ext_resource type="Texture2D" uid="uid://cpdo2fri76gte" path="res://art/snake-tail-right.png" id="11_effmh"]
 [ext_resource type="Texture2D" uid="uid://rm44ubmri5vj" path="res://art/snake-tail-up.png" id="12_ydnym"]
+[ext_resource type="Texture2D" path="res://art/meat.png" id="13_6xg2r"]
 [ext_resource type="Texture2D" uid="uid://47knct6ol031" path="res://art/animations/snake-body-move-left-Sheet.png" id="13_bhcwj"]
 [ext_resource type="Texture2D" uid="uid://cpxcoe2a6ffkg" path="res://art/animations/snake-body-move-right-Sheet.png" id="14_8svje"]
 [ext_resource type="Texture2D" uid="uid://ss74s0ciy6st" path="res://art/animations/snake-body-move-up-Sheet.png" id="15_32lij"]
@@ -52,11 +52,6 @@
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m2dvf"]
 texture = ExtResource("1_u1mdw")
 0:0/0 = 0
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1v1ya"]
-texture = ExtResource("2_e7ayl")
-0:0/0 = 0
-4:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gf2ne"]
 texture = ExtResource("1_ikqb2")
@@ -113,6 +108,10 @@ texture = ExtResource("9_60s3e")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_15g61"]
 texture = ExtResource("10_ql8r6")
+0:0/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_uys0v"]
+texture = ExtResource("13_6xg2r")
 0:0/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0g1kg"]
@@ -836,8 +835,8 @@ sources/47 = SubResource("TileSetAtlasSource_bo3gu")
 sources/48 = SubResource("TileSetAtlasSource_0tt7u")
 sources/6 = SubResource("TileSetAtlasSource_8wf1x")
 sources/0 = SubResource("TileSetAtlasSource_m2dvf")
-sources/1 = SubResource("TileSetAtlasSource_1v1ya")
 sources/52 = SubResource("TileSetAtlasSource_u18k3")
 sources/49 = SubResource("TileSetAtlasSource_iwmoh")
 sources/50 = SubResource("TileSetAtlasSource_e7pua")
 sources/51 = SubResource("TileSetAtlasSource_88na8")
+sources/2 = SubResource("TileSetAtlasSource_uys0v")

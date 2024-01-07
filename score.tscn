@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://bhbv3tssospvd"]
+[gd_scene load_steps=4 format=3 uid="uid://cylgt5o6eh7fl"]
 
 [ext_resource type="Script" path="res://score.gd" id="1_av8x6"]
 [ext_resource type="FontFile" uid="uid://bkhk0aym7pks4" path="res://font/Lemon Days.ttf" id="2_pg2qn"]
@@ -7,22 +7,37 @@
 bg_color = Color(0.168627, 0.368627, 0.00392157, 1)
 
 [node name="Score" type="CanvasLayer" groups=["ScoreGroup"]]
+process_mode = 3
 script = ExtResource("1_av8x6")
 
-[node name="Control" type="Control" parent="."]
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -800.0
+offset_top = -400.0
+offset_right = -760.0
+offset_bottom = -360.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Control" type="Control" parent="HUD"]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Panel" type="Panel" parent="Control"]
+[node name="Panel" type="Panel" parent="HUD/Control"]
 layout_mode = 0
 offset_left = 680.0
 offset_right = 800.0
 offset_bottom = 800.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_eoill")
 
-[node name="TimeText" type="Label" parent="."]
+[node name="TimeText" type="Label" parent="HUD"]
 offset_left = 720.0
 offset_top = 360.0
 offset_right = 766.0
@@ -35,7 +50,7 @@ theme_override_font_sizes/font_size = 30
 text = "0"
 horizontal_alignment = 1
 
-[node name="TimeText2" type="Label" parent="."]
+[node name="ScoreText2" type="Label" parent="HUD"]
 offset_left = 712.0
 offset_top = 261.0
 offset_right = 769.0
@@ -45,18 +60,59 @@ theme_override_fonts/font = ExtResource("2_pg2qn")
 theme_override_font_sizes/font_size = 20
 text = "SCORE"
 
-[node name="ScoreText" type="Label" parent="."]
-offset_left = 733.0
-offset_top = 224.0
-offset_right = 750.0
-offset_bottom = 266.0
+[node name="ScoreText" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 15.314
+anchor_top = 5.768
+anchor_right = 15.314
+anchor_bottom = 5.768
+offset_left = 120.44
+offset_top = -4.72
+offset_right = 137.44
+offset_bottom = 37.28
+grow_horizontal = 2
+grow_vertical = 2
 theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
 theme_override_fonts/font = ExtResource("2_pg2qn")
 theme_override_font_sizes/font_size = 30
-text = "0"
+text = "0
+"
 horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="ScoreText2" type="Label" parent="."]
+[node name="HighText" type="Label" parent="HUD"]
+offset_left = 719.0
+offset_top = 548.0
+offset_right = 776.0
+offset_bottom = 575.0
+theme_override_colors/font_color = Color(0.886262, 0.886262, 0.886261, 1)
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 20
+text = "HIGH"
+
+[node name="HighText2" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 15.314
+anchor_top = 5.768
+anchor_right = 15.314
+anchor_bottom = 5.768
+offset_left = 120.44
+offset_top = 281.28
+offset_right = 137.44
+offset_bottom = 323.28
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 30
+text = "0
+"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TimeText2" type="Label" parent="HUD"]
 offset_left = 722.0
 offset_top = 396.0
 offset_right = 764.0
@@ -66,7 +122,7 @@ theme_override_fonts/font = ExtResource("2_pg2qn")
 theme_override_font_sizes/font_size = 20
 text = "TIME"
 
-[node name="TitleText" type="Label" parent="."]
+[node name="TitleText" type="Label" parent="HUD"]
 offset_left = 688.0
 offset_top = 120.0
 offset_right = 791.0
@@ -76,3 +132,69 @@ theme_override_fonts/font = ExtResource("2_pg2qn")
 theme_override_font_sizes/font_size = 35
 text = "SNAKE"
 horizontal_alignment = 1
+
+[node name="GameOverMenu" type="Control" parent="."]
+visible = false
+layout_mode = 3
+anchors_preset = 0
+offset_left = 131.0
+offset_top = 232.0
+offset_right = 171.0
+offset_bottom = 272.0
+
+[node name="GameOverText" type="Label" parent="GameOverMenu"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -40.0
+offset_top = -40.0
+offset_right = 499.0
+offset_bottom = 90.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 100
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Continue" type="Button" parent="GameOverMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 89.0
+offset_top = 124.0
+offset_right = 439.0
+offset_bottom = 196.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 35
+text = "Continue"
+
+[node name="Menu" type="Button" parent="GameOverMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 89.0
+offset_top = 206.0
+offset_right = 439.0
+offset_bottom = 278.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 35
+text = "Menu"
+
+[connection signal="pressed" from="GameOverMenu/Continue" to="." method="_on_continue_pressed"]
+[connection signal="pressed" from="GameOverMenu/Menu" to="." method="_on_menu_pressed"]

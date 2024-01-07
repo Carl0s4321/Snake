@@ -15,11 +15,22 @@ run/main_scene="res://menu.tscn"
 config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+HighScore="*res://high_score.gd"
+
 [display]
 
-window/size/viewport_width=800
+window/size/viewport_width=920
 window/size/viewport_height=800
+window/stretch/mode="viewport"
 window/stretch/aspect="keep_height"
+
+[importer_defaults]
+
+animation_library={
+"animation/fps": 60.0
+}
 
 [input]
 
@@ -58,7 +69,10 @@ ui_down={
 
 [physics]
 
-common/max_physics_steps_per_frame=1
+common/physics_ticks_per_second=15
+common/max_physics_steps_per_frame=2
+common/physics_jitter_fix=1.0
+common/enable_object_picking=false
 
 [rendering]
 

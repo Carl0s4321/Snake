@@ -1,9 +1,24 @@
-[gd_scene load_steps=8 format=3 uid="uid://cibbi4sxo2rxl"]
+[gd_scene load_steps=8 format=3 uid="uid://bt4ib8d0ocwap"]
 
 [ext_resource type="Script" path="res://Control.gd" id="1_gxsrg"]
 [ext_resource type="Texture2D" uid="uid://bfyvh3o3eimwd" path="res://art/bg.png" id="1_kxvkd"]
 [ext_resource type="Script" path="res://AnimationPlayer.gd" id="3_o35mj"]
 [ext_resource type="FontFile" uid="uid://bkhk0aym7pks4" path="res://font/Lemon Days.ttf" id="4_htkk5"]
+
+[sub_resource type="Animation" id="Animation_rttel"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:region_rect")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Rect2(0, 0, 800, 800)]
+}
 
 [sub_resource type="Animation" id="Animation_i76ti"]
 resource_name = "moveBG"
@@ -22,21 +37,6 @@ tracks/0/keys = {
 "values": [Rect2(0, 0, 800, 800), Rect2(530, 530, 800, 800)]
 }
 
-[sub_resource type="Animation" id="Animation_rttel"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath(".:region_rect")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Rect2(0, 0, 800, 800)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_heomu"]
 _data = {
 "RESET": SubResource("Animation_rttel"),
@@ -47,7 +47,8 @@ _data = {
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_repeat = 2
-position = Vector2(400, 400)
+position = Vector2(460, 460)
+scale = Vector2(1.1475, 1.1475)
 texture = ExtResource("1_kxvkd")
 region_enabled = true
 region_rect = Rect2(0, 0, 800, 800)
@@ -61,11 +62,17 @@ script = ExtResource("3_o35mj")
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3
-anchors_preset = 0
-offset_left = 231.0
-offset_top = 223.0
-offset_right = 271.0
-offset_bottom = 263.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -170.0
+offset_top = -220.0
+offset_right = -130.0
+offset_bottom = -180.0
+grow_horizontal = 2
+grow_vertical = 2
 scale = Vector2(2.53555, 2.53555)
 script = ExtResource("1_gxsrg")
 
@@ -94,11 +101,12 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("4_htkk5")
 text = "Quit"
 
-[node name="Label" type="Label" parent="."]
-offset_left = 211.0
-offset_top = 206.0
-offset_right = 575.0
-offset_bottom = 368.0
+[node name="Label" type="Label" parent="Control"]
+offset_left = -7.88783
+offset_top = -6.70466
+offset_right = 356.112
+offset_bottom = 155.295
+scale = Vector2(0.394, 0.394)
 theme_override_fonts/font = ExtResource("4_htkk5")
 theme_override_font_sizes/font_size = 125
 text = "SNAKE"

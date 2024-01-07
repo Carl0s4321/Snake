@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://h0rqb781qgp5"]
+
+[ext_resource type="SpriteFrames" uid="uid://cyu8hevbt4yps" path="res://sprites/art.tres" id="1_ftiup"]
+[ext_resource type="Script" path="res://tile_piece.gd" id="2_2mlt8"]
+
+[node name="Tile_Piece" type="AnimatedSprite2D"]
+sprite_frames = ExtResource("1_ftiup")
+animation = &"body-move-left"
+script = ExtResource("2_2mlt8")
