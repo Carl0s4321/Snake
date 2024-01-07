@@ -7,7 +7,6 @@ signal game_over
 
 var tile_positions = {}
 var apple_positions = []
-var add_apples = false
 
 var timer = 0
 const FOOD = 1
@@ -83,6 +82,7 @@ var player_snake = {
 	"type":SNAKE,
 	"basic_turn":randi_range(1,10),
 	"direction":Vector2(1,0),
+	"grow":false,
 	"body":[Vector2(3,10),Vector2(2,10),Vector2(1,10),Vector2(0,10)]
 }
 var previous_direction = "right"
@@ -94,6 +94,7 @@ var enemy_snakes = [
 		"basic_turn":randi_range(1,10),
 		"rerouting":1,
 		"direction":Vector2(-1,0),
+		"grow":false,
 	 	"body":[Vector2(25,15),Vector2(25,15),Vector2(25,15),Vector2(25,15),Vector2(25,15),Vector2(25,15),Vector2(25,15),Vector2(25,15)]
 	},{
 		"status":SPAWNING,
@@ -101,6 +102,7 @@ var enemy_snakes = [
 		"basic_turn":randi_range(1,10),
 		"rerouting":1,
 		"direction":Vector2(-1,0),
+		"grow":false,
 	 	"body":[Vector2(25,5),Vector2(25,5),Vector2(25,5),Vector2(25,5),Vector2(25,15),Vector2(25,15),Vector2(25,15),Vector2(25,15)]
 	},
 	]
@@ -111,6 +113,7 @@ var enemy_template = {
 	"basic_turn":randi_range(5,10),
 	"rerouting":1,
 	"direction":Vector2(0,0),
+	"grow":false,
 	"body":[]
 }
 func spawn_snake():
@@ -470,9 +473,9 @@ func move_snake(layer, snake):
 	delete_tiles(snake["body"][-1], layer) #delete the tail
 			
 	var body_copy
-	if add_apples and layer == SNAKE: #if player
+	if snake["grow"]: #if player
 		body_copy = snake["body"].slice(0,snake["body"].size())
-		add_apples = false
+		snake["grow"] = false
 	else:
 		# take everything except the last index in the body (tail)
 		body_copy = snake["body"].slice(0,snake["body"].size()-1)
@@ -668,37 +671,38 @@ func check_snake_out_of_map(snake):
 	elif head.y < 0:
 		snake["body"][0].y = 24
 
-func check_food_eaten():
-	if player_snake["status"] == DEAD: return
-	var position = player_snake["body"][1]
+func check_food_eaten(snake):
+	if snake["status"] == DEAD: return
+	var position = snake["body"][1]
 	var food_type = get_cell(position, FOOD)#$SnakeApple.get_cell_source_id(FOOD, position)
 	if food_type["tile"] != null:
 		#grow body smoothly
-		var tile = get_cell(player_snake["body"][-1], SNAKE)["name"]#$SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-1])
+		var tile = get_cell(snake["body"][-1], snake["type"])["name"]#$SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-1])
 		var tail
-		if (tile == "tail-move-left"): tail = "tail-left"
-		elif (tile == "tail-move-right"): tail = "tail-right"
-		elif (tile == "tail-move-up"): tail = "tail-up"
-		elif (tile == "tail-move-down"): tail = "tail-down"
+		if (tile == "tail-move-left" or tile == "body-horizontal"): tail = "tail-left"
+		elif (tile == "tail-move-right" or tile == "body-horizontal"): tail = "tail-right"
+		elif (tile == "tail-move-up" or tile == "body-vertical"): tail = "tail-up"
+		elif (tile == "tail-move-down" or tile == "body-vertical"): tail = "tail-down"
 		
-		var body = get_cell(player_snake["body"][-2], SNAKE)["name"]#$SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-2])
+		var body = get_cell(snake["body"][-2], snake["type"])["name"]#$SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-2])
 		if(body == "ne-move-up" or body == "ne-move-right"): tile = "body-ne"
 		elif(body == "nw-move-up" or body == "nw-move-left"): tile = "body-nw"
 		elif(body == "se-move-down" or body == "se-move-right"): tile = "body-se"
 		elif(body == "sw-move-down" or body == "sw-move-left"): tile = "body-sw"
 		elif(tile == "tail-move-left" or tile == "tail-move-right"): tile = "body-horizontal"
 		elif(tile == "tail-move-up" or tile == "tail-move-down"): tile = "body-vertical"
-
-		set_snake(player_snake["body"][-2], SNAKE, tile)
-		set_snake(player_snake["body"][-1], SNAKE, tail)
+		
+		if snake["body"][-2] != null and snake["body"][-1] != null:
+			set_snake(snake["body"][-2], snake["type"], tile)
+			set_snake(snake["body"][-1], snake["type"], tail)
 		
 		delete_tiles(position, FOOD)
 		if food_type["name"] == "apple":
 			apple_positions.erase(position)
 			apple_positions.push_back(place_apple())
-		add_apples = true
-		
-		update_score((player_snake["body"].size()-3) * 10, $SnakeApple.map_to_local(position))
+		snake["grow"] = true
+		if snake["type"] == SNAKE:
+			update_score((player_snake["body"].size()-3) * 10, $SnakeApple.map_to_local(position))
 		
 func update_score(value, bubble_position = null):
 	if bubble_position != null:
@@ -713,7 +717,7 @@ func _on_snake_tick_timeout():
 	#player
 	move_snake(SNAKE, player_snake)
 	draw_snake(SNAKE, player_snake)
-	check_food_eaten()
+	check_food_eaten(player_snake)
 	draw_apple()
 	check_snake_out_of_map(player_snake)
 	#enemies
@@ -729,6 +733,7 @@ func _on_snake_tick_timeout():
 			pending_removal.push_back(enemy)
 			continue
 		draw_snake(type, enemy)
+		check_food_eaten(enemy)
 		check_snake_out_of_map(enemy)
 	for enemy in pending_removal:
 		enemy_snakes.erase(enemy)

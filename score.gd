@@ -13,7 +13,12 @@ func update_timer(timer):
 	$HUD/TimeText.text = str(timer)
 
 func _ready():
-	get_tree().paused = false
+	$GameOverMenu/Cursor.global_position.y = $GameOverMenu/Button.get_child(button_index).global_position.y + 24
+	if HighScore.reload == false:
+		get_tree().paused = true
+	else:
+		$GameOverMenu.visible = false
+		get_tree().paused = false
 	$HUD/HighText2.text = str(HighScore.high_score)
 
 #func _draw():
@@ -21,8 +26,13 @@ func _ready():
 	#draw_rect(bg_rect, Color8(43, 94, 1))
 
 func _on_continue_pressed():
-	get_tree().paused = false
-	get_tree().reload_current_scene()
+	if HighScore.reload == false:
+		get_tree().paused = false
+		$GameOverMenu.visible = false
+	else:
+		get_tree().paused = false
+		$GameOverMenu.visible = false
+		get_tree().reload_current_scene()
 	
 
 
@@ -34,6 +44,7 @@ func _on_menu_pressed():
 
 func _on_main_game_over():
 	$GameOverMenu.visible = true
+	HighScore.reload = true
 
 func _input(event):
 	if Input.is_action_just_pressed("ui_up"):

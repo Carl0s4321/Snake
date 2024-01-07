@@ -144,7 +144,6 @@ Snack"
 horizontal_alignment = 1
 
 [node name="GameOverMenu" type="Control" parent="."]
-visible = false
 layout_mode = 3
 anchors_preset = 0
 offset_left = 131.0
@@ -152,32 +151,20 @@ offset_top = 232.0
 offset_right = 171.0
 offset_bottom = 272.0
 
-[node name="GameOverText" type="Label" parent="GameOverMenu"]
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -40.0
-offset_top = -40.0
-offset_right = 499.0
-offset_bottom = 90.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
-theme_override_fonts/font = ExtResource("2_pg2qn")
-theme_override_font_sizes/font_size = 100
-text = "GAME OVER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
 [node name="Cursor" type="TextureRect" parent="GameOverMenu"]
-offset_left = 68.0
-offset_top = 165.0
-offset_right = 100.0
-offset_bottom = 197.0
+offset_left = 35.0
+offset_top = 187.0
+offset_right = 67.0
+offset_bottom = 219.0
 texture = SubResource("AnimatedTexture_bk75e")
+
+[node name="Cursor2" type="TextureRect" parent="GameOverMenu"]
+offset_left = 506.0
+offset_top = 186.0
+offset_right = 538.0
+offset_bottom = 218.0
+texture = SubResource("AnimatedTexture_bk75e")
+flip_h = true
 
 [node name="Button" type="Control" parent="GameOverMenu"]
 anchors_preset = 0
@@ -191,17 +178,18 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 89.0
-offset_top = 124.0
-offset_right = 439.0
-offset_bottom = 196.5
+offset_left = 61.5
+offset_top = 145.0
+offset_right = 466.5
+offset_bottom = 217.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_pg2qn")
 theme_override_font_sizes/font_size = 35
-text = "Start Again"
+text = " Insert Coin To Start "
 
 [node name="Menu" type="Button" parent="GameOverMenu/Button"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -217,6 +205,53 @@ grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_pg2qn")
 theme_override_font_sizes/font_size = 35
 text = "Menu"
+
+[node name="Panel" type="Panel" parent="GameOverMenu"]
+layout_mode = 0
+offset_left = 83.0
+offset_top = -93.0
+offset_right = 483.0
+offset_bottom = 132.0
+
+[node name="TitleSnake" type="Label" parent="GameOverMenu/Panel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -509.0
+offset_top = -228.0
+offset_right = 30.0
+offset_bottom = -98.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 100
+text = "SNAKE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleSnack" type="Label" parent="GameOverMenu/Panel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -436.0
+offset_top = -138.0
+offset_right = 103.0
+offset_bottom = -8.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
+theme_override_fonts/font = ExtResource("2_pg2qn")
+theme_override_font_sizes/font_size = 100
+text = "SNACK"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="mouse_entered" from="GameOverMenu/Button/Continue" to="." method="_on_continue_mouse_entered"]
 [connection signal="pressed" from="GameOverMenu/Button/Continue" to="." method="_on_continue_pressed"]
