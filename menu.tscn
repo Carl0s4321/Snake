@@ -111,6 +111,7 @@ theme_override_fonts/font = ExtResource("4_htkk5")
 text = "Quit"
 
 [node name="Title" type="Label" parent="Control"]
+layout_mode = 0
 offset_left = -21.6915
 offset_top = -47.7214
 offset_right = 342.308
@@ -121,6 +122,7 @@ theme_override_font_sizes/font_size = 125
 text = "SNAKE"
 
 [node name="Title2" type="Label" parent="Control"]
+layout_mode = 0
 offset_left = 4.7327
 offset_top = -3.54952
 offset_right = 381.733

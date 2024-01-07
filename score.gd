@@ -19,6 +19,9 @@ func _ready():
 	else:
 		$GameOverMenu.visible = false
 		get_tree().paused = false
+		
+		$menu_sounds.set_stream(load("res://audio/insertCoin.wav"))
+		$menu_sounds.play()
 	$HUD/HighText2.text = str(HighScore.high_score)
 
 #func _draw():
@@ -29,6 +32,9 @@ func _on_continue_pressed():
 	if HighScore.reload == false:
 		get_tree().paused = false
 		$GameOverMenu.visible = false
+		
+		$menu_sounds.set_stream(load("res://audio/insertCoin.wav"))
+		$menu_sounds.play()
 	else:
 		get_tree().paused = false
 		$GameOverMenu.visible = false
@@ -45,6 +51,9 @@ func _on_menu_pressed():
 func _on_main_game_over():
 	$GameOverMenu.visible = true
 	HighScore.reload = true
+	
+	$menu_sounds.set_stream(load("res://audio/gameOver.wav"))
+	$menu_sounds.play()
 
 func _input(event):
 	if Input.is_action_just_pressed("ui_up"):

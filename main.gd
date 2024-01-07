@@ -2,6 +2,7 @@ extends Node
 
 @export var floating_text : PackedScene
 @export var tile_piece : PackedScene
+@export var one_shot : PackedScene
 
 signal game_over
 
@@ -142,7 +143,7 @@ func spawn_snake():
 	if attempts == 0: return
 	
 	var enemy_properties = enemy_template.duplicate(true)
-	var enemy_type = randi_range(3,5)
+	var enemy_type = ENEMY_LONG#randi_range(3,5)
 	var enemy_length = randi_range(4,12)
 	
 	if enemy_type == ENEMY_LONG:
@@ -466,11 +467,13 @@ func move_snake(layer, snake):
 				#$SnakeApple.set_cell(FOOD, Vector2i(part.x, part.y), TILE_PARTS["meat"], Vector2i(0,0),0)
 		spawn_snake()
 		return snake
+		
+	delete_tiles(snake["body"][-1], layer) #delete the tail
 	if snake["status"] == SPAWNING:
 		snake["status"] = SPAWNED
 		return
 		
-	delete_tiles(snake["body"][-1], layer) #delete the tail
+	
 			
 	var body_copy
 	if snake["grow"]: #if player
@@ -567,7 +570,8 @@ func kill_snake(layer, snake, body_copy):
 	elif distance == 3: multipler = 3
 	elif distance <= 5: multipler = 2
 	update_score(int((player_snake["body"].size()-3) * snake["body"].size() * multipler), $SnakeApple.map_to_local(snake["body"][0]))
-
+	play_sound("res://audio/enemySnakeDeath.wav")
+	
 func delete_tiles(position, layer):
 	if position == null: return
 	set_cell(position, layer)
@@ -678,7 +682,7 @@ func check_food_eaten(snake):
 	if food_type["tile"] != null:
 		#grow body smoothly
 		var tile = get_cell(snake["body"][-1], snake["type"])["name"]#$SnakeApple.get_cell_source_id(SNAKE, player_snake["body"][-1])
-		var tail
+		var tail = "empty"
 		if (tile == "tail-move-left" or tile == "body-horizontal"): tail = "tail-left"
 		elif (tile == "tail-move-right" or tile == "body-horizontal"): tail = "tail-right"
 		elif (tile == "tail-move-up" or tile == "body-vertical"): tail = "tail-up"
@@ -700,6 +704,9 @@ func check_food_eaten(snake):
 		if food_type["name"] == "apple":
 			apple_positions.erase(position)
 			apple_positions.push_back(place_apple())
+			if snake["type"] == SNAKE: play_sound("res://audio/appleEat2.wav", -5)
+		elif food_type["name"] == "meat" and snake["type"] == SNAKE: play_sound("res://audio/deadSnakeEat4Short.wav", -5)
+			
 		snake["grow"] = true
 		if snake["type"] == SNAKE:
 			update_score((player_snake["body"].size()-3) * 10, $SnakeApple.map_to_local(position))
@@ -778,6 +785,10 @@ func set_cell(position : Vector2, layer : int, tile_part = "empty"):
 			$Food_Storage.add_child(tile)
 		else:
 			$Tile_Storage.add_child(tile)
+			
+		#play sound if player turns
+		if layer == SNAKE and tile_part.contains("turn"):
+			play_sound("res://audio/changeDirection.wav", -10)
 		
 		#replace if duplicate
 		var previous = tile_positions[key][layer]["name"]
@@ -804,3 +815,10 @@ func get_cell(position : Vector2, layer : int):
 	return value
 		
 	#return $SnakeApple.get_cell_source_id(i, position)
+	
+func play_sound(string, volume = 0):
+	var audio = one_shot.instantiate()
+	audio.set_stream(load(string))
+	audio.play()
+	audio.volume_db = volume
+	add_child(audio)

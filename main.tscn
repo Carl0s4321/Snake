@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://gige70kcqqq1"]
+[gd_scene load_steps=8 format=3 uid="uid://gige70kcqqq1"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_uqj7q"]
 [ext_resource type="Texture2D" uid="uid://bp88n62ebkwgm" path="res://art/grass.png" id="2_8wsrp"]
@@ -6,11 +6,13 @@
 [ext_resource type="PackedScene" uid="uid://cylgt5o6eh7fl" path="res://score.tscn" id="4_7meve"]
 [ext_resource type="PackedScene" uid="uid://blxtw0nfmms46" path="res://snake_apple.tscn" id="4_onn24"]
 [ext_resource type="PackedScene" uid="uid://h0rqb781qgp5" path="res://tile_piece.tscn" id="6_5cgsm"]
+[ext_resource type="PackedScene" uid="uid://p13y8tf12cjh" path="res://oneshot_audio.tscn" id="7_y7hjh"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_uqj7q")
 floating_text = ExtResource("2_uuhgc")
 tile_piece = ExtResource("6_5cgsm")
+one_shot = ExtResource("7_y7hjh")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 self_modulate = Color(0.682353, 0.682353, 0.682353, 1)
@@ -39,10 +41,6 @@ zoom = Vector2(2, 2)
 [node name="Text_Storage" type="Node2D" parent="."]
 
 [node name="SnakeApple" parent="." instance=ExtResource("4_onn24")]
-layer_2/modulate = Color(0.427451, 0.870588, 0.113725, 1)
-layer_3/modulate = Color(0.858824, 0.870588, 0.113725, 1)
-layer_4/modulate = Color(0.741176, 0.0980392, 0.0980392, 1)
-layer_5/modulate = Color(0.113725, 0.541176, 0.870588, 1)
 
 [node name="Score" parent="." instance=ExtResource("4_7meve")]
 

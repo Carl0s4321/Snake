@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://p13y8tf12cjh"]
+
+[ext_resource type="Script" path="res://oneshot_audio.gd" id="1_st17k"]
+
+[node name="OneshotAudio" type="AudioStreamPlayer"]
+autoplay = true
+max_polyphony = 10
+script = ExtResource("1_st17k")
+
+[connection signal="finished" from="." to="." method="_on_finished"]
