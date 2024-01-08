@@ -54,8 +54,12 @@ func _on_main_game_over():
 	
 	$menu_sounds.set_stream(load("res://audio/gameOver.wav"))
 	$menu_sounds.play()
+	get_tree().paused = true
 
 func _input(event):
+	if Input.is_action_just_pressed("ui_accept"):
+		_on_continue_pressed()
+	return
 	if Input.is_action_just_pressed("ui_up"):
 		button_index -= 1
 		
