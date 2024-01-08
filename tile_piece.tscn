@@ -5,7 +5,7 @@
 
 [node name="Tile_Piece" type="AnimatedSprite2D"]
 sprite_frames = ExtResource("1_ftiup")
-animation = &"body-move-left"
+animation = &"bonk-down"
 script = ExtResource("2_2mlt8")
 
 [connection signal="animation_finished" from="." to="." method="_on_animation_finished"]

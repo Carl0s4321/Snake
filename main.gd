@@ -181,14 +181,32 @@ func draw_still_snake(layer, snake):
 		if block_index == 0:
 			var head_dir = relation2(snake["body"][0], snake["body"][1])
 			if head_dir == null: return
-			if head_dir == 'right': 
-				set_snake(block, layer, "head-right", wrapping)
+			
+			if snake["direction"] == Vector2(1,0) and head_dir == "down":
+				set_snake(block, layer, "bonk-ne-right", wrapping)
+			elif snake["direction"] == Vector2(1,0) and head_dir == "up":
+				set_snake(block, layer, "bonk-se-right", wrapping)
+			elif snake["direction"] == Vector2(-1,0) and head_dir == "down":
+				set_snake(block, layer, "bonk-nw-left", wrapping)
+			elif snake["direction"] == Vector2(-1,0) and head_dir == "up":
+				set_snake(block, layer, "bonk-sw-left", wrapping)
+			elif snake["direction"] == Vector2(0,1) and head_dir == "right":
+				set_snake(block, layer, "bonk-sw-down", wrapping)
+			elif snake["direction"] == Vector2(0,1) and head_dir == "left":
+				set_snake(block, layer, "bonk-se-down", wrapping)
+			elif snake["direction"] == Vector2(0,-1) and head_dir == "right":
+				set_snake(block, layer, "bonk-nw-up", wrapping)
+			elif snake["direction"] == Vector2(0,-1) and head_dir == "left":
+				set_snake(block, layer, "bonk-se-up", wrapping)
+				
+			elif head_dir == 'right': 
+				set_snake(block, layer, "bonk-right", wrapping)
 			elif head_dir == 'left': 
-				set_snake(block, layer, "head-left", wrapping)
+				set_snake(block, layer, "bonk-left", wrapping)
 			elif head_dir == 'up': 
-				set_snake(block, layer, "head-up", wrapping)
+				set_snake(block, layer, "bonk-up", wrapping)
 			elif head_dir == 'down': 
-				set_snake(block, layer, "head-down", wrapping)
+				set_snake(block, layer, "bonk-down", wrapping)
 		#tail
 		elif block_index == snake["body"].size()-1:
 			var tail_dir = relation2(snake["body"][-1], snake["body"][-2])
@@ -818,7 +836,8 @@ func get_cell(position : Vector2, layer : int):
 	
 func play_sound(string, volume = 0):
 	var audio = one_shot.instantiate()
+	add_child(audio)
 	audio.set_stream(load(string))
 	audio.play()
 	audio.volume_db = volume
-	add_child(audio)
+	

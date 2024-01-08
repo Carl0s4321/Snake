@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cylgt5o6eh7fl"]
+[gd_scene load_steps=9 format=3 uid="uid://cylgt5o6eh7fl"]
 
 [ext_resource type="Script" path="res://score.gd" id="1_av8x6"]
 [ext_resource type="FontFile" uid="uid://bkhk0aym7pks4" path="res://font/Lemon Days.ttf" id="2_pg2qn"]
 [ext_resource type="FontFile" uid="uid://b3acphmyrej56" path="res://font/Daydream.ttf" id="2_tn4lr"]
 [ext_resource type="Texture2D" uid="uid://dxsrg23jcpv4v" path="res://art/cursor.png" id="3_axm5y"]
 [ext_resource type="Texture2D" uid="uid://bp428d2l8tgno" path="res://art/empty.png" id="4_ra2rr"]
+[ext_resource type="AudioStream" uid="uid://7ta43016h173" path="res://audio/theme.wav" id="6_brbom"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eoill"]
 bg_color = Color(0.168627, 0.368627, 0.00392157, 1)
@@ -137,9 +138,9 @@ text = "TIME"
 
 [node name="TitleText" type="Label" parent="HUD"]
 layout_mode = 0
-offset_left = 688.0
+offset_left = 686.0
 offset_top = 56.0
-offset_right = 797.0
+offset_right = 795.0
 offset_bottom = 151.0
 theme_override_colors/font_color = Color(0.952941, 0.952941, 0.952941, 1)
 theme_override_fonts/font = ExtResource("2_tn4lr")
@@ -261,6 +262,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="menu_sounds" type="AudioStreamPlayer" parent="."]
+
+[node name="Start_Screen_Audio" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_brbom")
+autoplay = true
 
 [connection signal="mouse_entered" from="GameOverMenu/Button/Continue" to="." method="_on_continue_mouse_entered"]
 [connection signal="pressed" from="GameOverMenu/Button/Continue" to="." method="_on_continue_pressed"]
