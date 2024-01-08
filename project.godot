@@ -24,7 +24,6 @@ HighScore="*res://high_score.gd"
 window/size/viewport_width=800
 window/size/viewport_height=600
 window/stretch/mode="viewport"
-window/stretch/aspect="expand"
 
 [importer_defaults]
 
@@ -92,3 +91,4 @@ common/enable_object_picking=false
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
+2d/snap/snap_2d_transforms_to_pixel=true
