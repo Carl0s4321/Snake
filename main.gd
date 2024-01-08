@@ -491,8 +491,6 @@ func move_snake(layer, snake):
 		snake["status"] = SPAWNED
 		return
 		
-	
-			
 	var body_copy
 	if snake["grow"]: #if player
 		body_copy = snake["body"].slice(0,snake["body"].size())
