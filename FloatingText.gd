@@ -3,7 +3,7 @@ extends Node2D
 var is_kill = false
 
 func set_text(string):
-	$Node2D/Label.text = str(string)
+	$Label.text = str(string)
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if is_kill:

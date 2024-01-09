@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_uqj7q"]
 [ext_resource type="Texture2D" uid="uid://bp88n62ebkwgm" path="res://art/grass.png" id="2_8wsrp"]
-[ext_resource type="PackedScene" uid="uid://c0u23l3mydaj7" path="res://floating_text.tscn" id="2_uuhgc"]
+[ext_resource type="PackedScene" uid="uid://b7bv1hhrv6vo3" path="res://text_float.tscn" id="2_fndp7"]
 [ext_resource type="PackedScene" uid="uid://cylgt5o6eh7fl" path="res://score.tscn" id="4_7meve"]
 [ext_resource type="PackedScene" uid="uid://blxtw0nfmms46" path="res://snake_apple.tscn" id="4_onn24"]
 [ext_resource type="PackedScene" uid="uid://h0rqb781qgp5" path="res://tile_piece.tscn" id="6_5cgsm"]
@@ -17,7 +17,7 @@ sources/0 = SubResource("TileSetAtlasSource_lrvg1")
 
 [node name="Main" type="Node"]
 script = ExtResource("1_uqj7q")
-floating_text = ExtResource("2_uuhgc")
+floating_text = ExtResource("2_fndp7")
 tile_piece = ExtResource("6_5cgsm")
 one_shot = ExtResource("7_y7hjh")
 
