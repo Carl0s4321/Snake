@@ -28,7 +28,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5, 1.5, 2),
 "transitions": PackedFloat32Array(0.5, 1, 2, 1),
 "update": 0,
-"values": [Vector2(-4, 10), Vector2(-4, -10), Vector2(-4, -10), Vector2(-4, -30)]
+"values": [Vector2(-30, 10), Vector2(-30, -10), Vector2(-30, -10), Vector2(-30, -30)]
 }
 
 [sub_resource type="Animation" id="Animation_ao2cj"]
@@ -56,7 +56,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0, 0.5, 1.5, 2),
 "transitions": PackedFloat32Array(0.5, 1, 2, 1),
 "update": 0,
-"values": [Vector2(-4, 10), Vector2(-4, -10), Vector2(-4, -10), Vector2(-4, -30)]
+"values": [Vector2(-30, 10), Vector2(-30, -10), Vector2(-30, -10), Vector2(-30, -30)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mby13"]
@@ -75,9 +75,8 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -4.0
 offset_top = 10.0
-offset_right = 5.0
+offset_right = 60.0
 offset_bottom = 31.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -85,7 +84,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
 theme_override_constants/outline_size = 4
 theme_override_fonts/font = ExtResource("2_uyg0u")
-text = "0"
+text = "000"
 horizontal_alignment = 1
 vertical_alignment = 1
 
