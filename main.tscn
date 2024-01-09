@@ -42,6 +42,9 @@ scale = Vector2(1.5, 1.5)
 [node name="Text_Storage" type="Node2D" parent="."]
 scale = Vector2(1.5, 1.5)
 
+[node name="Kill_Storage" type="Node2D" parent="."]
+scale = Vector2(1.5, 1.5)
+
 [node name="SnakeApple" parent="." instance=ExtResource("4_onn24")]
 scale = Vector2(1.5, 1.5)
 rendering_quadrant_size = 48

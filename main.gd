@@ -395,8 +395,6 @@ func draw_snake(layer, snake):
 		elif block_index == snake["body"].size()-1:
 			var tail_dir = relation2(snake["body"][-1], snake["body"][-2])
 			if tail_dir == null: return
-			if snake["type"] == ENEMY_LONG:
-				print(block)
 			#tail_dir = which direction the end tail points to
 			if tail_dir == 'right': 
 				set_snake(block, layer, "tail-move-right", wrapping)
@@ -713,7 +711,7 @@ func check_snake_out_of_map(snake):
 		snake["body"][0].y = 24
 
 func check_food_eaten(snake):
-	if snake["status"] == DEAD: return
+	if snake["status"] == DEAD or snake["spawn_count"] > 0: return
 	var position = snake["body"][1]
 	var food_type = get_cell(position, FOOD)#$SnakeApple.get_cell_source_id(FOOD, position)
 	if food_type["tile"] != null:
