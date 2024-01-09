@@ -128,8 +128,8 @@ func spawn_snake():
 	var spawn_position
 	var spawn_range 
 	var spawn_direction
-	var colliding = -1
-	while colliding != null and attempts > 0:
+	var colliding = [{}]
+	while colliding.size() > 0 and attempts > 0:
 		is_horizontal = randi_range(0,1)
 		is_negative = (randi_range(0,1) * 2)-1
 		if is_horizontal == 1:
@@ -177,8 +177,8 @@ func check_spawn(snake):
 func draw_still_snake(layer, snake):
 	
 	var wrapping = check_spawn(snake)
-	
-	for block_index in snake["body"].size():
+		
+	for block_index in snake["body"].size():    
 		var block = snake["body"][block_index]
 		
 		#head
@@ -266,7 +266,7 @@ func draw_snake(layer, snake):
 	
 	for block_index in snake["body"].size():
 		var block = snake["body"][block_index]
-		
+
 		#head
 		if block_index == 0:
 			var head_dir = relation2(snake["body"][0], snake["body"][1])
@@ -467,7 +467,7 @@ func game_is_over():
 	
 	
 	for enemy in enemy_snakes: #stop enemy snakes
-		enemy["body"] = enemy["body"].slice(1,enemy["body"].size()-1)
+		enemy["body"] = enemy["body"].slice(0,enemy["body"].size()-1)
 		draw_still_snake(enemy["type"], enemy)
 		enemy["status"] = DEAD
 		
@@ -496,36 +496,50 @@ func move_snake(layer, snake):
 	if snake["direction"] == null: return
 	var new_head = body_copy[0] + snake["direction"]
 	#detect collisions
-	var id = check_collision(new_head)
-	if id != null and id["tile"] != null:#not empty space
+	var collisions = check_collision(new_head)
+	if collisions.size() > 0:#not empty space
 		#if collision, attempt to move away
 		if snake["type"] != SNAKE:
 			var attempts = snake["rerouting"]
-			while id != null and attempts > 0:
+			while collisions.size() > 0 and attempts > 0:
 				snake["direction"] = choose_direction([snake["direction"] * -1])
 				new_head = body_copy[0] + snake["direction"]
-				id = check_collision(new_head)
+				collisions = check_collision(new_head)
 				attempts -= 1
-			if id != null and id["tile"] != null:
-				return kill_snake(layer, snake, body_copy)
+			if collisions.size() > 0:
+				snake["body"] = body_copy
+				return kill_snake(layer, snake)
+				#var force_end = head_on_check(layer, collisions, snake)
+				#if force_end: return snake
 		else: #otherwise kill
 			#head on collision, kill other snake
-			if id["name"].contains("head") or id["name"].contains("bonk"):
-				
-				if id["name"].contains("up") and snake["direction"].y == 1:
-					return 
-				elif id["name"].contains("down") and snake["direction"].y == -1:
-					return
-				elif id["name"].contains("left") and snake["direction"].x == 1:
-					return
-				elif id["name"].contains("right") and snake["direction"].x == -1:
-					return
-			kill_snake(layer, snake, body_copy)
-			return
+			snake["body"] = body_copy
+			var force_end = head_on_check(layer, collisions, snake)
+			if force_end: return
 	
 	
 	body_copy.insert(0, new_head)
 	snake["body"] = body_copy
+	
+func head_on_check(layer, collisions, snake):
+	for id in collisions:
+		#if id["layer"] == snake["type"] and collisions.size() == 1:
+		if id["name"].contains("head") or id["name"].contains("bonk"):
+			if id["name"].contains("up") and snake["direction"].y == 1:
+				pass 
+			elif id["name"].contains("down") and snake["direction"].y == -1:
+				pass
+			elif id["name"].contains("left") and snake["direction"].x == 1:
+				pass
+			elif id["name"].contains("right") and snake["direction"].x == -1:
+				pass
+			else:#head on death
+				kill_snake(layer, snake)
+				return true
+		else:#not head on death
+			kill_snake(layer, snake)
+			return true
+	return false
 
 func basic_enemy_movement(snake):
 	if snake["status"] == DEAD or snake["status"] == DYING: return
@@ -562,11 +576,11 @@ func hunting_enemy_movement(snake):
 	#check if the future position will collide
 	var banned = [snake["direction"], snake["direction"]*-1]
 	var attempts = 3
-	var future_position = check_collision(snake["body"][0] + snake["direction"])
-	while (future_position != null and future_position["tile"] != null) and attempts > 0:
+	var future_collision = check_collision(snake["body"][0] + snake["direction"])
+	while (future_collision.size() > 0) and attempts > 0:
 		snake["direction"] = choose_direction(banned)
 		banned.append(snake["direction"])
-		future_position = check_collision(snake["body"][0] + snake["direction"])
+		future_collision = check_collision(snake["body"][0] + snake["direction"])
 		attempts -= 1
 
 var possible_directions = [Vector2(1,0),Vector2(-1,0),Vector2(0,1),Vector2(0,-1)]
@@ -578,8 +592,7 @@ func choose_direction(banned_directions : Array):
 		attempts -= 1
 	return direction
 
-func kill_snake(layer, snake, body_copy):
-	snake["body"] = body_copy
+func kill_snake(layer, snake):
 	draw_still_snake(layer, snake)
 	snake["status"] = DEAD
 	
@@ -593,7 +606,7 @@ func kill_snake(layer, snake, body_copy):
 	elif distance == 2: multipler = 5
 	elif distance == 3: multipler = 3
 	elif distance <= 5: multipler = 2
-	update_score(int((player_snake["body"].size()-3) * snake["body"].size() * multipler), $SnakeApple.map_to_local(snake["body"][0]))
+	update_score(int((player_snake["body"].size()-3) * snake["body"].size() * multipler), $SnakeApple.map_to_local(snake["body"][0]), true)
 	play_sound("res://audio/enemySnakeDeath.wav")
 	
 		#spawn food
@@ -617,13 +630,14 @@ var collision_layers = [SNAKE, ENEMY_BASIC, ENEMY_HUNTER, ENEMY_LONG]
 func check_collision(position):
 	position.x = wrapi(position.x, 0, 25)
 	position.y = wrapi(position.y, 0 ,25)
+	var collisions = []
 	for i in collision_layers:
 		var id = get_cell(position, i)
 		#var id = $SnakeApple.get_cell_source_id(i, position)
 		if id["tile"] != null:
-			if id["name"].contains("tail"): return null
-			return id
-	return null
+			if !id["name"].contains("tail"):
+				collisions.push_back(id)
+	return collisions
 
 var recently_pressed = 0
 func _input(event):
@@ -667,7 +681,7 @@ func _ready():
 			var key = str(i) + ":" + str(j)
 			tile_positions[key] = {}
 			for k in range(1,6):
-				tile_positions[key][k] = {"name":"empty","tile":null}
+				tile_positions[key][k] = {"name":"empty","tile":null,"layer":-1}
 	apple_positions.push_back(Vector2(randi_range(0,24),randi_range(0,24)))
 	apple_positions.push_back(Vector2(randi_range(0,24),randi_range(0,24)))
 	
@@ -748,12 +762,16 @@ func check_food_eaten(snake):
 		if snake["type"] == SNAKE:
 			update_score((player_snake["body"].size()-3) * 10, $SnakeApple.map_to_local(position))
 		
-func update_score(value, bubble_position = null):
+func update_score(value, bubble_position = null, is_kill = false):
 	if bubble_position != null:
 		var child = floating_text.instantiate()
 		child.set_text(value)
 		child.global_position = bubble_position
-		$Text_Storage.add_child(child)
+		if is_kill:
+			child.is_kill = true
+			$Kill_Storage.add_child(child)
+		else:
+			$Text_Storage.add_child(child)
 	score += value
 	get_tree().call_group('ScoreGroup', 'update_score', score)
 
@@ -762,6 +780,12 @@ func _on_snake_tick_timeout():
 		move_snake(SNAKE, player_snake)
 		draw_snake(SNAKE, player_snake)
 		return
+	#player
+	move_snake(SNAKE, player_snake)
+	draw_snake(SNAKE, player_snake)
+	check_food_eaten(player_snake)
+	draw_apple()
+	check_snake_out_of_map(player_snake)
 	#enemies
 	var pending_removal = []
 	for enemy in enemy_snakes:
@@ -779,12 +803,7 @@ func _on_snake_tick_timeout():
 		draw_snake(type, enemy)
 		check_food_eaten(enemy)
 		check_snake_out_of_map(enemy)
-	#player
-	move_snake(SNAKE, player_snake)
-	draw_snake(SNAKE, player_snake)
-	check_food_eaten(player_snake)
-	draw_apple()
-	check_snake_out_of_map(player_snake)
+	
 	for enemy in pending_removal:
 		enemy_snakes.erase(enemy)
 
@@ -803,7 +822,7 @@ func set_cell(position : Vector2, layer : int, tile_part = "empty", override = f
 	if tile_part == "empty": #remove cell
 		if tile_positions[key][layer]["tile"] == null: return
 		tile_positions[key][layer]["tile"].queue_free()
-		tile_positions[key][layer] = {"name":"empty","tile":null}
+		tile_positions[key][layer] = {"name":"empty","tile":null,"layer":-1}
 		if layer != FOOD:
 			if position.x == 0 or position.x == -1:
 				$SnakeApple.set_cell(0, Vector2i(24, position.y), -1)
@@ -849,7 +868,7 @@ func set_cell(position : Vector2, layer : int, tile_part = "empty", override = f
 			elif position.y == 24 or position.y == 25:
 				$SnakeApple.set_cell(0, Vector2i(position.x, 0), 3, Vector2i(0,0),0)
 		
-		tile_positions[key][layer] = {"name":tile_part,"tile":tile}
+		tile_positions[key][layer] = {"name":tile_part,"tile":tile,"layer":layer}
 		
 	
 	#$SnakeApple.set_cell(FOOD, Vector2i(position.x, position.y), tile_part, Vector2i(0,0),0)

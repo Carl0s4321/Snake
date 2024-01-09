@@ -58,18 +58,9 @@ func _on_main_game_over():
 
 func _input(event):
 	if Input.is_action_just_pressed("ui_accept"):
-		_on_continue_pressed()
-	return
-	if Input.is_action_just_pressed("ui_up"):
-		button_index -= 1
-		
-	if Input.is_action_just_pressed("ui_down"):
-		button_index += 1
-	if Input.is_action_just_pressed("ui_accept") or Input.is_action_just_pressed("ui_select"):
-		if button_index == 0:
+		if get_tree().paused:
 			_on_continue_pressed()
-		elif button_index == 1:
-			_on_menu_pressed()
+	return
 
 	button_index = wrapi(button_index, 0, 2)
 	$GameOverMenu/Cursor.global_position.y = $GameOverMenu/Button.get_child(button_index).global_position.y + 24
