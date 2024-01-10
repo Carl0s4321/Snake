@@ -602,10 +602,11 @@ func kill_snake(layer, snake):
 	var difference = snake["body"][0] - player_snake["body"][0]
 	var distance = max(abs(difference.x), abs(difference.y))
 	var multipler = 1
-	if distance <= 1: multipler = 7
-	elif distance == 2: multipler = 5
-	elif distance == 3: multipler = 3
-	elif distance <= 5: multipler = 2
+	if distance <= 1: multipler = 10
+	elif distance == 2: multipler = 7
+	elif distance == 3: multipler = 5
+	elif distance <= 5: multipler = 3
+	elif distance <= 8: multipler = 2
 	update_score(int((player_snake["body"].size()-3) * snake["body"].size() * multipler), $SnakeApple.map_to_local(snake["body"][0]), true)
 	play_sound("res://audio/enemySnakeDeath.wav")
 	
