@@ -60,6 +60,8 @@ func _input(event):
 	if Input.is_action_just_pressed("ui_accept"):
 		if get_tree().paused:
 			_on_continue_pressed()
+	if Input.is_physical_key_pressed(KEY_ESCAPE):
+		get_tree().quit()
 	return
 
 	button_index = wrapi(button_index, 0, 2)

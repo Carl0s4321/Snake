@@ -1,7 +1,26 @@
-[gd_scene load_steps=6 format=3 uid="uid://b7bv1hhrv6vo3"]
+[gd_scene load_steps=6 format=3 uid="uid://ba8leprc6g1a"]
 
-[ext_resource type="Script" path="res://FloatingText.gd" id="1_xikin"]
 [ext_resource type="FontFile" uid="uid://bkhk0aym7pks4" path="res://font/Lemon Days.ttf" id="2_uyg0u"]
+
+[sub_resource type="GDScript" id="GDScript_ssu43"]
+script/source = "extends Node2D
+
+var is_kill = false
+
+func set_text(string):
+	$Label.text = str(string)
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	if is_kill:
+		$AnimationPlayer.play(\"kill\")
+	else:
+		$AnimationPlayer.play(\"float\")
+	
+
+
+func _on_animation_player_animation_finished(anim_name):
+	queue_free()
+"
 
 [sub_resource type="Animation" id="Animation_pkdfp"]
 resource_name = "float"
@@ -66,7 +85,7 @@ _data = {
 }
 
 [node name="text_float" type="Node2D"]
-script = ExtResource("1_xikin")
+script = SubResource("GDScript_ssu43")
 
 [node name="Label" type="Label" parent="."]
 self_modulate = Color(1, 1, 1, 0)

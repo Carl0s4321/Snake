@@ -23,6 +23,7 @@ HighScore="*res://high_score.gd"
 
 window/size/viewport_width=800
 window/size/viewport_height=600
+window/size/mode=3
 window/stretch/mode="viewport"
 window/snap/snap_2d_transforms_to_pixel=false
 window/snap/snap_2d_vertices_to_pixel=false
